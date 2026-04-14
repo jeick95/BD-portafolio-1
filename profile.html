@@ -1,0 +1,548 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi Perfil - Base de Datos II</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        .profile-tabs {
+            display: flex;
+            gap: 1rem;
+            margin-bottom: 2rem;
+            border-bottom: 2px solid var(--border-color);
+            padding-bottom: 0.5rem;
+        }
+        .profile-tab {
+            padding: 0.75rem 1.5rem;
+            color: var(--text-secondary);
+            text-decoration: none;
+            font-weight: 600;
+            border-radius: var(--radius-md) var(--radius-md) 0 0;
+            transition: all var(--transition-fast);
+            position: relative;
+            cursor: pointer;
+            background: none;
+            border: none;
+        }
+        .profile-tab:hover {
+            color: var(--primary);
+            background: rgba(99, 102, 241, 0.05);
+        }
+        .profile-tab.active {
+            color: var(--primary);
+        }
+        .profile-tab.active::after {
+            content: '';
+            position: absolute;
+            bottom: -0.5rem;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: var(--gradient-primary);
+            border-radius: var(--radius-full);
+        }
+        .settings-section {
+            margin-bottom: 2rem;
+        }
+        .settings-title {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-primary);
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+        }
+        .settings-title i {
+            background: var(--gradient-primary);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+        .setting-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 1rem;
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            margin-bottom: 0.5rem;
+            border: 1px solid var(--border-color);
+        }
+        .setting-info h4 {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+        .setting-info p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        .toggle-switch {
+            position: relative;
+            width: 50px;
+            height: 26px;
+        }
+        .toggle-switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+        .toggle-slider {
+            position: absolute;
+            cursor: pointer;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: var(--bg-input);
+            border-radius: var(--radius-full);
+            transition: all var(--transition-fast);
+        }
+        .toggle-slider::before {
+            content: '';
+            position: absolute;
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background: white;
+            border-radius: 50%;
+            transition: all var(--transition-fast);
+            box-shadow: var(--shadow-sm);
+        }
+        .toggle-switch input:checked + .toggle-slider {
+            background: var(--gradient-primary);
+        }
+        .toggle-switch input:checked + .toggle-slider::before {
+            transform: translateX(24px);
+        }
+        .avatar-upload {
+            position: relative;
+            width: 150px;
+            height: 150px;
+            margin: 0 auto 2rem;
+        }
+        .avatar-upload .avatar {
+            width: 100%;
+            height: 100%;
+            border-radius: 50%;
+            object-fit: cover;
+            border: 5px solid var(--success);
+            box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.3), var(--shadow-lg);
+        }
+        .avatar-upload-btn {
+            position: absolute;
+            bottom: 0;
+            right: 0;
+            width: 45px;
+            height: 45px;
+            background: var(--gradient-primary);
+            border: none;
+            border-radius: 50%;
+            color: white;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1rem;
+            box-shadow: var(--shadow-md);
+            transition: all var(--transition-fast);
+        }
+        .avatar-upload-btn:hover {
+            transform: scale(1.1);
+        }
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-card);
+            border-radius: var(--radius-md);
+            margin-bottom: 0.75rem;
+            border: 1px solid var(--border-color);
+            transition: all var(--transition-fast);
+        }
+        .activity-item:hover {
+            transform: translateX(5px);
+            border-color: var(--primary);
+        }
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+        }
+        .activity-icon.login { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); }
+        .activity-icon.upload { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .activity-icon.edit { background: linear-gradient(135deg, #f59e0b 0%, #d97706 100%); }
+        .activity-icon.delete { background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%); }
+        .activity-content h4 {
+            font-weight: 600;
+            color: var(--text-primary);
+            margin-bottom: 0.25rem;
+        }
+        .activity-content p {
+            font-size: 0.85rem;
+            color: var(--text-secondary);
+        }
+        .activity-time {
+            font-size: 0.75rem;
+            color: var(--text-light);
+            margin-top: 0.25rem;
+        }
+        .danger-zone {
+            background: rgba(239, 68, 68, 0.05);
+            border: 1px solid rgba(239, 68, 68, 0.2);
+            border-radius: var(--radius-lg);
+            padding: 1.5rem;
+        }
+        .danger-zone h3 {
+            color: var(--error);
+            font-weight: 700;
+            margin-bottom: 1rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        .btn-danger {
+            background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            color: white;
+        }
+        .btn-danger:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(239, 68, 68, 0.4);
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">
+            <i class="fas fa-database"></i>
+            Base de Datos II
+        </a>
+        <div class="navbar-actions">
+            <button class="theme-toggle" onclick="toggleTheme()" title="Cambiar tema">
+                <i class="fas fa-moon"></i>
+            </button>
+            <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Inicio</a>
+            <a href="proyecto.html" class="nav-link"><i class="fas fa-folder-open"></i> Proyectos</a>
+            <button class="btn-icon" onclick="logoutUser()" title="Cerrar sesión">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="profile-header">
+            <div class="avatar-container">
+                <div class="avatar-ring"></div>
+                <img src="https://api.dicebear.com/7.x/avataaars/svg?seed=Felix" alt="Avatar" class="avatar">
+                <div class="avatar-badge">
+                    <i class="fas fa-check"></i>
+                </div>
+            </div>
+            <div class="profile-info">
+                <h2 id="profileName">Cargando...</h2>
+                <p><i class="fas fa-envelope"></i> <span id="profileEmail">...</span></p>
+                <p><i class="fas fa-graduation-cap"></i> <span id="profileCareer">...</span></p>
+                <span class="role-badge" id="profileRole">
+                    <i class="fas fa-user"></i> Usuario
+                </span>
+            </div>
+        </div>
+
+        <div class="profile-tabs">
+            <button class="profile-tab active" onclick="showTab('info')">
+                <i class="fas fa-user"></i> Información
+            </button>
+            <button class="profile-tab" onclick="showTab('settings')">
+                <i class="fas fa-cog"></i> Configuración
+            </button>
+            <button class="profile-tab" onclick="showTab('activity')">
+                <i class="fas fa-history"></i> Actividad
+            </button>
+        </div>
+
+        <div id="tab-info" class="tab-content">
+            <div class="card animate-fade-in">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-user-circle"></i>
+                        Información Personal
+                    </h3>
+                </div>
+                <form id="profileForm" onsubmit="updateProfile(event)">
+                    <div class="input-group">
+                        <label for="editNombre">Nombre Completo</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-user"></i>
+                            <input type="text" id="editNombre" required>
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="editCarrera">Carrera</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-graduation-cap"></i>
+                            <select id="editCarrera" required>
+                                <option value="Ingeniería de Sistemas">Ingeniería de Sistemas</option>
+                                <option value="Ingeniería de Software">Ingeniería de Software</option>
+                                <option value="Ciencias de la Computación">Ciencias de la Computación</option>
+                                <option value="Administración de Bases de Datos">Administración de Bases de Datos</option>
+                                <option value="Otro">Otro</option>
+                            </select>
+                        </div>
+                    </div>
+                    <button type="submit" class="btn btn-primary">
+                        <i class="fas fa-save"></i> Guardar Cambios
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <div id="tab-settings" class="tab-content" style="display: none;">
+            <div class="settings-section">
+                <h3 class="settings-title"><i class="fas fa-palette"></i> Apariencia</h3>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h4>Modo Oscuro</h4>
+                        <p>Activa el tema oscuro para toda la aplicación</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" id="darkModeToggle" onchange="toggleTheme()">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3 class="settings-title"><i class="fas fa-bell"></i> Notificaciones</h3>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h4>Notificaciones por Email</h4>
+                        <p>Recibe actualizaciones sobre nuevos archivos</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox" checked>
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h4>Recordatorios</h4>
+                        <p>Recibe recordatorios de tareas pendientes</p>
+                    </div>
+                    <label class="toggle-switch">
+                        <input type="checkbox">
+                        <span class="toggle-slider"></span>
+                    </label>
+                </div>
+            </div>
+
+            <div class="settings-section">
+                <h3 class="settings-title"><i class="fas fa-shield-alt"></i> Seguridad</h3>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h4>Cambiar Contraseña</h4>
+                        <p>Actualiza tu contraseña regularmente</p>
+                    </div>
+                    <button class="btn btn-secondary btn-sm" onclick="showChangePasswordModal()">
+                        <i class="fas fa-key"></i> Cambiar
+                    </button>
+                </div>
+                <div class="setting-item">
+                    <div class="setting-info">
+                        <h4>Sesiones Activas</h4>
+                        <p>Gestiona tus sesiones en otros dispositivos</p>
+                    </div>
+                    <button class="btn btn-secondary btn-sm">
+                        <i class="fas fa-laptop"></i> Ver
+                    </button>
+                </div>
+            </div>
+
+            <div class="danger-zone">
+                <h3><i class="fas fa-exclamation-triangle"></i> Zona de Peligro</h3>
+                <p style="color: var(--text-secondary); margin-bottom: 1rem;">Estas acciones son irreversibles. Por favor, actúa con precaución.</p>
+                <button class="btn btn-danger" onclick="confirmDeleteAccount()">
+                    <i class="fas fa-trash"></i> Eliminar Cuenta
+                </button>
+            </div>
+        </div>
+
+        <div id="tab-activity" class="tab-content" style="display: none;">
+            <div class="card animate-fade-in">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-history"></i>
+                        Actividad Reciente
+                    </h3>
+                </div>
+                <div id="activityList">
+                    <div class="activity-item">
+                        <div class="activity-icon login">
+                            <i class="fas fa-sign-in-alt"></i>
+                        </div>
+                        <div class="activity-content">
+                            <h4>Inicio de Sesión</h4>
+                            <p>Sesión iniciada correctamente</p>
+                            <span class="activity-time">Hace unos minutos</span>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon edit">
+                            <i class="fas fa-edit"></i>
+                        </div>
+                        <div class="activity-content">
+                            <h4>Perfil Actualizado</h4>
+                            <p>Información del perfil modificada</p>
+                            <span class="activity-time">Hace 2 horas</span>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon upload">
+                            <i class="fas fa-cloud-upload-alt"></i>
+                        </div>
+                        <div class="activity-content">
+                            <h4>Archivo Subido</h4>
+                            <p>proyecto_final.sql cargado exitosamente</p>
+                            <span class="activity-time">Ayer</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="changePasswordModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title"><i class="fas fa-key"></i> Cambiar Contraseña</h3>
+                <button class="modal-close" onclick="closeModal('changePasswordModal')">
+                    <i class="fas fa-times"></i>
+                </button>
+            </div>
+            <form onsubmit="changePassword(event)">
+                <div class="input-group">
+                    <label>Contraseña Actual</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-lock"></i>
+                        <input type="password" id="currentPassword" required>
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Nueva Contraseña</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-key"></i>
+                        <input type="password" id="newPassword" required minlength="6">
+                    </div>
+                </div>
+                <div class="input-group">
+                    <label>Confirmar Nueva Contraseña</label>
+                    <div class="input-wrapper">
+                        <i class="fas fa-key"></i>
+                        <input type="password" id="confirmNewPassword" required>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" onclick="closeModal('changePasswordModal')">Cancelar</button>
+                    <button type="submit" class="btn btn-primary">Guardar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <script>
+        let currentUser = null;
+
+        document.addEventListener('DOMContentLoaded', async () => {
+            loadTheme();
+            checkAuth();
+            await loadProfile();
+        });
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+            document.getElementById('darkModeToggle').checked = savedTheme === 'dark';
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            document.getElementById('darkModeToggle').checked = newTheme === 'dark';
+        }
+
+        async function loadProfile() {
+            currentUser = await getCurrentUser();
+            if (!currentUser) return;
+
+            const { success, profile } = await getUserProfile(currentUser.id);
+            if (success && profile) {
+                document.getElementById('profileName').textContent = profile.nombre || 'Usuario';
+                document.getElementById('profileEmail').textContent = profile.email || currentUser.email;
+                document.getElementById('profileCareer').textContent = profile.carrera || 'No especificada';
+                document.getElementById('profileRole').innerHTML = `<i class="fas fa-${profile.rol === 'admin' ? 'crown' : 'user'}"></i> ${profile.rol === 'admin' ? 'Administrador' : 'Usuario'}`;
+                
+                document.getElementById('editNombre').value = profile.nombre || '';
+                document.getElementById('editCarrera').value = profile.carrera || 'Ingeniería de Sistemas';
+            } else {
+                document.getElementById('profileEmail').textContent = currentUser.email;
+            }
+        }
+
+        async function updateProfile(event) {
+            event.preventDefault();
+            
+            const nombre = document.getElementById('editNombre').value;
+            const carrera = document.getElementById('editCarrera').value;
+
+            const result = await updateUserProfile(currentUser.id, { nombre, carrera });
+            if (result.success) {
+                await loadProfile();
+            }
+        }
+
+        function showTab(tabName) {
+            document.querySelectorAll('.tab-content').forEach(tab => tab.style.display = 'none');
+            document.querySelectorAll('.profile-tab').forEach(tab => tab.classList.remove('active'));
+            
+            document.getElementById('tab-' + tabName).style.display = 'block';
+            event.target.classList.add('active');
+        }
+
+        function showChangePasswordModal() {
+            document.getElementById('changePasswordModal').classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        async function changePassword(event) {
+            event.preventDefault();
+            showNotification('Función de cambiar contraseña próximamente', 'info');
+            closeModal('changePasswordModal');
+        }
+
+        function confirmDeleteAccount() {
+            if (confirm('¿Estás seguro de que deseas eliminar tu cuenta? Esta acción no se puede deshacer.')) {
+                showNotification('Función de eliminar cuenta próximamente', 'info');
+            }
+        }
+    </script>
+</body>
+</html>

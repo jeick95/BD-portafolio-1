@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Configuración de Conexión | Supabase</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary-gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --success-gradient: linear-gradient(135deg, #10b981 0%, #059669 100%);
+            --danger-gradient: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+            --bg-primary: #0f0f23;
+            --bg-secondary: #1a1a2e;
+            --bg-card: rgba(255, 255, 255, 0.05);
+            --text-primary: #ffffff;
+            --text-secondary: #b8c6db;
+            --text-muted: #8892b0;
+            --border-color: rgba(255, 255, 255, 0.1);
+        }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(102, 126, 234, 0.3) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(16, 185, 129, 0.3) 0%, transparent 50%);
+            z-index: -1;
+        }
+
+        .config-container {
+            width: 100%;
+            max-width: 700px;
+            background: var(--bg-card);
+            border: 1px solid var(--border-color);
+            border-radius: 24px;
+            padding: 50px;
+            backdrop-filter: blur(20px);
+            margin: 20px;
+        }
+
+        .config-header {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .config-header h1 {
+            font-size: 2rem;
+            margin-bottom: 10px;
+            background: var(--primary-gradient);
+            -webkit-background-clip: text;
+            background-clip: text;
+            -webkit-text-fill-color: transparent;
+        }
+
+        .config-header p {
+            color: var(--text-secondary);
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--text-secondary);
+        }
+
+        .form-group label i {
+            margin-right: 8px;
+            color: #667eea;
+        }
+
+        .form-input {
+            width: 100%;
+            padding: 14px 16px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            color: var(--text-primary);
+            font-size: 1rem;
+            transition: all 0.3s;
+        }
+
+        .form-input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 20px rgba(102, 126, 234, 0.2);
+        }
+
+        .btn {
+            width: 100%;
+            padding: 16px;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: none;
+        }
+
+        .btn-primary {
+            background: var(--primary-gradient);
+            color: white;
+        }
+
+        .btn-success {
+            background: var(--success-gradient);
+            color: white;
+        }
+
+        .btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .connection-status {
+            padding: 20px;
+            border-radius: 12px;
+            text-align: center;
+            margin-bottom: 30px;
+            display: none;
+        }
+
+        .connection-status.success {
+            background: rgba(16, 185, 129, 0.2);
+            border: 1px solid rgba(16, 185, 129, 0.3);
+            display: block;
+        }
+
+        .connection-status.error {
+            background: rgba(239, 68, 68, 0.2);
+            border: 1px solid rgba(239, 68, 68, 0.3);
+            display: block;
+        }
+
+        .connection-status i {
+            font-size: 2rem;
+            margin-bottom: 10px;
+        }
+
+        .connection-status.success i {
+            color: #10b981;
+        }
+
+        .connection-status.error i {
+            color: #ef4444;
+        }
+
+        .instructions {
+            background: rgba(102, 126, 234, 0.1);
+            border: 1px solid rgba(102, 126, 234, 0.2);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+
+        .instructions h3 {
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .instructions ol {
+            padding-left: 20px;
+            color: var(--text-secondary);
+            line-height: 1.8;
+        }
+
+        .instructions code {
+            background: rgba(0, 0, 0, 0.3);
+            padding: 2px 6px;
+            border-radius: 4px;
+            font-family: 'JetBrains Mono', monospace;
+            color: #10b981;
+        }
+
+        .spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top-color: white;
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .back-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            color: var(--text-secondary);
+            text-decoration: none;
+            margin-bottom: 20px;
+            transition: color 0.3s;
+        }
+
+        .back-link:hover {
+            color: var(--text-primary);
+        }
+    </style>
+</head>
+<body>
+    <div class="config-container">
+        <a href="index.html" class="back-link">
+            <i class="fas fa-arrow-left"></i>
+            Volver al inicio
+        </a>
+
+        <div class="config-header">
+            <h1><i class="fas fa-database"></i> Configurar Conexión a Supabase</h1>
+            <p>Conecta tu aplicación con tu base de datos de Supabase</p>
+        </div>
+
+        <div id="connectionStatus" class="connection-status">
+            <i class="fas fa-spinner"></i>
+            <p>Verificando conexión...</p>
+        </div>
+
+        <form id="configForm">
+            <div class="form-group">
+                <label><i class="fas fa-link"></i> Supabase URL</label>
+                <input type="text" id="supabaseUrl" class="form-input" placeholder="https://dcntccncakaaftphyrkh.supabase.co" required>
+            </div>
+
+            <div class="form-group">
+                <label><i class="fas fa-key"></i> Supabase Anon Key</label>
+                <input type="text" id="supabaseKey" class="form-input" placeholder="eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjbnRjY25jYWthYWZ0cGh5cmtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwNDQxOTQsImV4cCI6MjA5MTYyMDE5NH0.KQWERzDIFD1e0FljbgO0Xq3kW8qeFzhVxawiBUoiPlU" required>
+            </div>
+
+            <button type="submit" class="btn btn-success" id="testBtn">
+                <i class="fas fa-plug"></i>
+                <span>Probar Conexión</span>
+            </button>
+
+            <button type="button" class="btn btn-primary" style="margin-top: 15px;" onclick="saveAndContinue()">
+                <i class="fas fa-save"></i>
+                <span>Guardar y Continuar</span>
+            </button>
+        </form>
+
+        <div class="instructions">
+            <h3><i class="fas fa-info-circle"></i> Instrucciones</h3>
+            <ol>
+                <li>Ve a <a href="https://supabase.com" target="_blank" style="color: #667eea;">supabase.com</a> y crea una cuenta o inicia sesión</li>
+                <li>Crea un nuevo proyecto en Supabase</li>
+                <li>Ve a <code>Settings</code> > <code>API</code></li>
+                <li>Copia el <strong>Project URL</strong> y pégalo en el campo "Supabase URL"</li>
+                <li>Copia el <strong>anon public</strong> key y pégalo en el campo "Supabase Anon Key"</li>
+                <li>En el SQL Editor de Supabase, ejecuta el contenido de <code>supabase-setup.sql</code></li>
+            </ol>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+    <script>
+        const statusEl = document.getElementById('connectionStatus');
+
+        function showStatus(type, message) {
+            statusEl.className = `connection-status ${type}`;
+            
+            const icon = type === 'success' ? 'fa-check-circle' : 'fa-exclamation-circle';
+            const iconColor = type === 'success' ? '#10b981' : '#ef4444';
+            
+            statusEl.innerHTML = `
+                <i class="fas ${icon}" style="color: ${iconColor}"></i>
+                <p>${message}</p>
+            `;
+        }
+
+        document.getElementById('configForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const url = document.getElementById('supabaseUrl').value.trim();
+            const key = document.getElementById('supabaseKey').value.trim();
+            
+            if (!url || !key) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Campos requeridos',
+                    text: 'Por favor completa todos los campos'
+                });
+                return;
+            }
+
+            showStatus('', 'Probando conexión...');
+
+            try {
+                const response = await fetch(`${url}/rest/v1/`, {
+                    headers: {
+                        'apikey': key,
+                        'Authorization': `Bearer ${key}`
+                    }
+                });
+
+                if (response.ok) {
+                    showStatus('success', '¡Conexión exitosa! Los datos son válidos.');
+                    
+                    localStorage.setItem('supabaseConfigured', 'true');
+                    localStorage.setItem('supabaseUrl', url);
+                    localStorage.setItem('supabaseKey', key);
+
+                    Swal.fire({
+                        icon: 'success',
+                        title: '¡Conexión exitosa!',
+                        text: 'Ahora puedes usar la aplicación'
+                    });
+                } else {
+                    throw new Error('Respuesta no válida');
+                }
+            } catch (error) {
+                showStatus('error', 'Error de conexión. Verifica los datos.');
+                Swal.fire({
+                    icon: 'error',
+                    title: 'Error de conexión',
+                    text: 'Verifica que la URL y clave sean correctas'
+                });
+            }
+        });
+
+        function saveAndContinue() {
+            const url = document.getElementById('supabaseUrl').value.trim();
+            const key = document.getElementById('supabaseKey').value.trim();
+            
+            if (!url || !key) {
+                Swal.fire({
+                    icon: 'warning',
+                    title: 'Campos requeridos',
+                    text: 'Por favor completa todos los campos'
+                });
+                return;
+            }
+
+            localStorage.setItem('supabaseConfigured', 'true');
+            localStorage.setItem('supabaseUrl', url);
+            localStorage.setItem('supabaseKey', key);
+
+            Swal.fire({
+                icon: 'success',
+                title: '¡Configuración guardada!',
+                text: 'Redirigiendo al inicio...',
+                timer: 1500,
+                showConfirmButton: false
+            }).then(() => {
+                window.location.href = 'index.html';
+            });
+        }
+
+        if (localStorage.getItem('supabaseConfigured') === 'true') {
+            document.getElementById('supabaseUrl').value = localStorage.getItem('supabaseUrl') || '';
+            document.getElementById('supabaseKey').value = localStorage.getItem('supabaseKey') || '';
+        }
+
+        // Theme Toggle
+        function toggleTheme() {
+            document.body.classList.toggle('light-mode');
+            localStorage.setItem('theme', document.body.classList.contains('light-mode') ? 'light' : 'dark');
+        }
+        if (localStorage.getItem('theme') === 'light') {
+            document.body.classList.add('light-mode');
+        }
+    </script>
+</body>
+</html>

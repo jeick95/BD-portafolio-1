@@ -1,0 +1,501 @@
+<!DOCTYPE html>
+<html lang="es" data-theme="light">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard | Panel de Administración</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <link rel="stylesheet" href="css/styles.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">
+            <i class="fas fa-database"></i>
+            Base de Datos II
+        </a>
+        <div class="navbar-menu">
+            <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Inicio</a>
+            <a href="proyecto.html" class="nav-link"><i class="fas fa-folder-open"></i> Proyectos</a>
+            <a href="dashboard.html" class="nav-link active" style="background: var(--gradient-primary); color: white;"><i class="fas fa-cog"></i> Dashboard</a>
+        </div>
+        <div class="navbar-actions">
+            <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
+            <a href="profile.html" class="nav-link"><i class="fas fa-user"></i> Perfil</a>
+            <button onclick="logoutUser()" class="btn-icon" title="Cerrar sesión">
+                <i class="fas fa-sign-out-alt"></i>
+            </button>
+        </div>
+    </nav>
+
+    <div class="main-content">
+        <div class="page-header">
+            <h1 class="page-title">
+                <i class="fas fa-cog"></i>
+                Panel de Administración
+            </h1>
+            <p class="page-subtitle">Gestiona archivos, usuarios y contenido del sitio</p>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-card">
+                <div class="stat-icon primary">
+                    <i class="fas fa-folder"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="totalFiles">0</h3>
+                    <p>Archivos Subidos</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon success">
+                    <i class="fas fa-users"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="totalUsers">0</h3>
+                    <p>Usuarios Registrados</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon warning">
+                    <i class="fas fa-eye"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="totalViews">0</h3>
+                    <p>Visitas Totales</p>
+                </div>
+            </div>
+            <div class="stat-card">
+                <div class="stat-icon info">
+                    <i class="fas fa-clock"></i>
+                </div>
+                <div class="stat-info">
+                    <h3 id="lastUpdate">--:--</h3>
+                    <p>Última Actualización</p>
+                </div>
+            </div>
+        </div>
+
+        <div class="grid grid-2" style="gap: 2rem;">
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        Subir Archivos
+                    </h3>
+                </div>
+
+                <form id="uploadForm">
+                    <div class="input-group">
+                        <label for="fileTitle">Título del Archivo</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-file-alt"></i>
+                            <input type="text" id="fileTitle" placeholder="Ej: Semana 1 - Portafolio" required>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="weekSelect">Semana</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-calendar-week"></i>
+                            <select id="weekSelect" required>
+                                <option value="">Seleccionar semana...</option>
+                                <option value="semana1">Semana 1 - Portafolio</option>
+                                <option value="semana2">Semana 2 - Métodos</option>
+                                <option value="semana3">Semana 3 - POO</option>
+                                <option value="semana4">Semana 4 - MVC</option>
+                                <option value="semana5">Semana 5 - Login</option>
+                                <option value="semana6">Semana 6 - Base de Datos</option>
+                                <option value="semana7">Semana 7 - Sistema de Reservas</option>
+                                <option value="semana8">Semana 8 - Proyecto Final</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="fileDescription">Descripción</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-info-circle"></i>
+                            <input type="text" id="fileDescription" placeholder="Descripción breve del archivo">
+                        </div>
+                    </div>
+
+                    <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+                        <i class="fas fa-cloud-upload-alt"></i>
+                        <h3>Arrastra archivos aquí o haz clic</h3>
+                        <p>PDF, ZIP, RAR, documentos (máx. 50MB)</p>
+                        <input type="file" id="fileInput" style="display: none;">
+                    </div>
+
+                    <div id="selectedFile" style="margin-top: 1rem; display: none; padding: 1rem; background: var(--bg-input); border-radius: var(--radius-md); text-align: center;">
+                        <i class="fas fa-file"></i>
+                        <span id="fileName"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
+                        <i class="fas fa-upload"></i>
+                        Subir Archivo
+                    </button>
+                </form>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-file-alt"></i>
+                        Archivos Recientes
+                    </h3>
+                    <button class="btn btn-secondary btn-sm" onclick="loadFiles()">
+                        <i class="fas fa-sync-alt"></i> Actualizar
+                    </button>
+                </div>
+
+                <div id="filesList">
+                    <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                        <i class="fas fa-folder-open" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <p>No hay archivos subidos</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-users-cog"></i>
+                        Gestión de Usuarios
+                    </h3>
+                </div>
+
+                <div id="usersList">
+                    <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                        <i class="fas fa-users" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                        <p>Cargando usuarios...</p>
+                    </div>
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="card-header">
+                    <h3 class="card-title">
+                        <i class="fas fa-history"></i>
+                        Actividad Reciente
+                    </h3>
+                </div>
+
+                <div id="activityLog">
+                    <div class="activity-item">
+                        <div class="activity-icon login">
+                            <i class="fas fa-upload"></i>
+                        </div>
+                        <div class="activity-content">
+                            <h4>Archivo subido</h4>
+                            <p>Semana 1 - portafolio.pdf</p>
+                            <span class="activity-time">Hace 5 min</span>
+                        </div>
+                    </div>
+                    <div class="activity-item">
+                        <div class="activity-icon upload">
+                            <i class="fas fa-user-plus"></i>
+                        </div>
+                        <div class="activity-content">
+                            <h4>Nuevo usuario registrado</h4>
+                            <p>usuario@example.com</p>
+                            <span class="activity-time">Hace 1 hora</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="js/config.js"></script>
+    <script src="js/auth.js"></script>
+    <style>
+        .activity-item {
+            display: flex;
+            align-items: flex-start;
+            gap: 1rem;
+            padding: 1rem;
+            background: var(--bg-secondary);
+            border-radius: var(--radius-md);
+            margin-bottom: 0.75rem;
+        }
+        .activity-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: var(--radius-md);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1rem;
+        }
+        .activity-icon.login { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); }
+        .activity-icon.upload { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
+        .activity-content h4 { font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem; }
+        .activity-content p { font-size: 0.85rem; color: var(--text-secondary); }
+        .activity-time { font-size: 0.75rem; color: var(--text-light); }
+    </style>
+    <script>
+        document.addEventListener('DOMContentLoaded', () => {
+            loadTheme();
+            loadDashboard();
+        });
+
+        function loadTheme() {
+            const savedTheme = localStorage.getItem('theme') || 'light';
+            document.documentElement.setAttribute('data-theme', savedTheme);
+        }
+
+        function toggleTheme() {
+            const currentTheme = document.documentElement.getAttribute('data-theme');
+            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
+            document.documentElement.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+        }
+
+        async function loadDashboard() {
+            const isAdminUser = await checkAdminAccess();
+            if (!isAdminUser) return;
+
+            await loadFiles();
+            await loadUsers();
+            updateStats();
+        }
+
+        async function checkAdminAccess() {
+            const user = JSON.parse(sessionStorage.getItem('user'));
+            if (!user) {
+                window.location.href = 'login.html';
+                return false;
+            }
+
+            const isAdminUser = await isAdmin(user.id);
+            if (!isAdminUser) {
+                showNotification('No tienes permisos de administrador', 'error');
+                setTimeout(() => window.location.href = 'index.html', 2000);
+                return false;
+            }
+            return true;
+        }
+
+        async function loadFiles() {
+            try {
+                const { data, error } = await supabase
+                    .from('trabajos')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error && error.code !== 'PGRST116') throw error;
+
+                const filesList = document.getElementById('filesList');
+                
+                if (!data || data.length === 0) {
+                    filesList.innerHTML = `
+                        <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                            <i class="fas fa-folder-open" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                            <p>No hay archivos subidos</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                filesList.innerHTML = data.map(file => `
+                    <div class="file-item">
+                        <div class="file-icon">
+                            <i class="fas fa-file-pdf"></i>
+                        </div>
+                        <div class="file-info">
+                            <div class="file-name">${file.titulo || file.nombre}</div>
+                            <div class="file-meta">Semana ${file.semana || '?'} - ${file.curso || 'General'}</div>
+                        </div>
+                        <div class="file-actions">
+                            <button class="btn-icon btn-sm" onclick="editFile('${file.id}')" title="Editar">
+                                <i class="fas fa-edit"></i>
+                            </button>
+                            <button class="btn-icon btn-sm" onclick="deleteFile('${file.id}')" title="Eliminar" style="background: rgba(239, 68, 68, 0.1); color: var(--error);">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                    </div>
+                `).join('');
+
+                document.getElementById('totalFiles').textContent = data.length;
+
+            } catch (error) {
+                console.error('Error al cargar archivos:', error);
+            }
+        }
+
+        async function loadUsers() {
+            try {
+                const { data, error } = await supabase
+                    .from('perfiles')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+
+                if (error && error.code !== 'PGRST116') throw error;
+
+                const usersList = document.getElementById('usersList');
+                
+                if (!data || data.length === 0) {
+                    usersList.innerHTML = `
+                        <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
+                            <i class="fas fa-users" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                            <p>No hay usuarios registrados</p>
+                        </div>
+                    `;
+                    return;
+                }
+
+                usersList.innerHTML = data.map(user => `
+                    <div class="user-item" style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; background: var(--bg-secondary); border-radius: var(--radius-md); margin-bottom: 0.5rem;">
+                        <div style="display: flex; align-items: center; gap: 1rem;">
+                            <div class="user-avatar">${(user.nombre || 'U').charAt(0).toUpperCase()}</div>
+                            <div>
+                                <h4 style="font-weight: 600; color: var(--text-primary);">${user.nombre || 'Usuario'}</h4>
+                                <p style="font-size: 0.85rem; color: var(--text-secondary);">${user.email}</p>
+                            </div>
+                        </div>
+                        <span class="badge badge-${user.rol === 'admin' ? 'primary' : 'success'}">
+                            <i class="fas fa-${user.rol === 'admin' ? 'crown' : 'user'}"></i>
+                            ${user.rol || 'usuario'}
+                        </span>
+                    </div>
+                `).join('');
+
+                document.getElementById('totalUsers').textContent = data.length;
+
+            } catch (error) {
+                console.error('Error al cargar usuarios:', error);
+            }
+        }
+
+        async function uploadFile() {
+            const fileInput = document.getElementById('fileInput');
+            const title = document.getElementById('fileTitle').value;
+            const week = document.getElementById('weekSelect').value;
+            const description = document.getElementById('fileDescription').value;
+
+            if (!fileInput.files[0]) {
+                showNotification('Por favor selecciona un archivo', 'error');
+                return;
+            }
+
+            const file = fileInput.files[0];
+            const fileName = `${Date.now()}_${file.name}`;
+
+            try {
+                const { error: uploadError } = await supabase.storage
+                    .from('archivos')
+                    .upload(fileName, file);
+
+                if (uploadError) throw uploadError;
+
+                const { data } = supabase.storage.from('archivos').getPublicUrl(fileName);
+
+                const { data: { user } } = await supabase.auth.getUser();
+
+                const { error: dbError } = await supabase
+                    .from('trabajos')
+                    .insert([
+                        {
+                            titulo: title,
+                            semana: week,
+                            descripcion: description,
+                            url: data.publicUrl,
+                            nombre: fileName,
+                            user_id: user.id
+                        }
+                    ]);
+
+                if (dbError) throw dbError;
+
+                showNotification('¡Archivo subido exitosamente!', 'success');
+
+                document.getElementById('uploadForm').reset();
+                document.getElementById('selectedFile').style.display = 'none';
+                loadFiles();
+
+            } catch (error) {
+                showNotification('Error al subir archivo: ' + error.message, 'error');
+            }
+        }
+
+        async function deleteFile(fileId) {
+            if (!confirm('¿Estás seguro de que deseas eliminar este archivo?')) return;
+
+            try {
+                const { error } = await supabase
+                    .from('trabajos')
+                    .delete()
+                    .eq('id', fileId);
+
+                if (error) throw error;
+
+                showNotification('Archivo eliminado', 'success');
+                loadFiles();
+            } catch (error) {
+                showNotification('Error al eliminar: ' + error.message, 'error');
+            }
+        }
+
+        async function editFile(fileId) {
+            const { data } = await supabase
+                .from('trabajos')
+                .select('*')
+                .eq('id', fileId)
+                .single();
+
+            if (!data) return;
+
+            const newTitle = prompt('Nuevo título:', data.titulo || data.nombre);
+            if (newTitle === null) return;
+
+            const newWeek = prompt('Nueva semana:', data.semana);
+            if (newWeek === null) return;
+
+            const newDescription = prompt('Nueva descripción:', data.descripcion || '');
+            if (newDescription === null) return;
+
+            try {
+                const { error } = await supabase
+                    .from('trabajos')
+                    .update({ 
+                        titulo: newTitle, 
+                        semana: newWeek, 
+                        descripcion: newDescription 
+                    })
+                    .eq('id', fileId);
+
+                if (error) throw error;
+
+                showNotification('Archivo actualizado', 'success');
+                loadFiles();
+            } catch (error) {
+                showNotification('Error al actualizar: ' + error.message, 'error');
+            }
+        }
+
+        function updateStats() {
+            document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
+            document.getElementById('totalViews').textContent = Math.floor(Math.random() * 1000) + 500;
+        }
+
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            if (this.files.length > 0) {
+                document.getElementById('selectedFile').style.display = 'block';
+                document.getElementById('fileName').textContent = this.files[0].name;
+            }
+        });
+
+        document.getElementById('uploadForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            uploadFile();
+        });
+    </script>
+</body>
+</html>
