@@ -189,3 +189,4 @@ window.updateUserProfile = updateUserProfile;
 window.isAdmin = isAdmin;
 window.checkAuth = checkAuth;
 window.fillRememberedEmail = fillRememberedEmail;
+window.showNotification = showNotification;

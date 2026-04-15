@@ -419,10 +419,20 @@
             const authArea = document.getElementById('authArea');
             const mobileAuthArea = document.getElementById('mobileAuthArea');
             const user = JSON.parse(sessionStorage.getItem('user'));
+            const adminEmails = ['luffyjeick95074ku@gmail.com', 'aranda@gmail.com', 't01256d@ms.upla.edu.pe', 'jeick95@gmail.com'];
 
             if (user) {
-                const { success, profile } = await getUserProfile(user.id);
-                const isAdmin = profile?.rol === 'admin';
+                let isAdmin = adminEmails.includes(user.email);
+                
+                try {
+                    const { success, profile } = await getUserProfile(user.id);
+                    if (profile?.rol === 'admin') {
+                        isAdmin = true;
+                    }
+                } catch (e) {
+                    // Si falla, usamos la verificación por email
+                }
+                
                 const authHTML = `
                     ${isAdmin ? '<a href="dashboard.html" class="btn btn-outline"><i class="fas fa-cog"></i> Dashboard</a>' : ''}
                     <a href="profile.html" class="btn btn-outline"><i class="fas fa-user"></i> Perfil</a>

@@ -234,13 +234,9 @@
                 <i class="fas fa-moon"></i>
             </button>
             <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Inicio</a>
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
+
             <a href="database.html" class="nav-link"><i class="fas fa-server"></i> Base de Datos</a>
->>>>>>> 543ba7d (Subida limpia)
->>>>>>> e14bce1 (Proyecto limpio sin tokens)
+
             <a href="proyecto.html" class="nav-link"><i class="fas fa-folder-open"></i> Proyectos</a>
             <button class="btn-icon" onclick="logoutUser()" title="Cerrar sesión">
                 <i class="fas fa-sign-out-alt"></i>
@@ -264,17 +260,13 @@
                 <span class="role-badge" id="profileRole">
                     <i class="fas fa-user"></i> Usuario
                 </span>
-<<<<<<< HEAD
-=======
-<<<<<<< HEAD
-=======
+
                 <div id="adminDashboardBtn" style="margin-top: 1rem; display: none;">
                     <a href="dashboard.html" class="btn btn-primary">
                         <i class="fas fa-cog"></i> Panel de Administración
                     </a>
                 </div>
->>>>>>> 543ba7d (Subida limpia)
->>>>>>> e14bce1 (Proyecto limpio sin tokens)
+
             </div>
         </div>
 
@@ -517,15 +509,7 @@
                 
                 document.getElementById('editNombre').value = profile.nombre || '';
                 document.getElementById('editCarrera').value = profile.carrera || 'Ingeniería de Sistemas';
-<<<<<<< HEAD
-            } else {
-                document.getElementById('profileEmail').textContent = currentUser.email;
-=======
-<<<<<<< HEAD
-            } else {
-                document.getElementById('profileEmail').textContent = currentUser.email;
-=======
-                
+
                 // Mostrar botón de Dashboard si es admin
                 if (profile.rol === 'admin') {
                     document.getElementById('adminDashboardBtn').style.display = 'block';
@@ -538,8 +522,6 @@
                     document.getElementById('profileRole').innerHTML = '<i class="fas fa-crown"></i> Administrador';
                     document.getElementById('adminDashboardBtn').style.display = 'block';
                 }
->>>>>>> 543ba7d (Subida limpia)
->>>>>>> e14bce1 (Proyecto limpio sin tokens)
             }
         }
 
