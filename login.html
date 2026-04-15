@@ -148,6 +148,25 @@
             </div>
 
             <form id="loginForm" onsubmit="handleLogin(event)">
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+                <!-- Selector de cuentas guardadas -->
+                <div class="saved-accounts-wrapper" id="savedAccountsWrapper" style="margin-bottom: 1rem; display: none;">
+                    <label for="savedAccounts">
+                        <i class="fas fa-users"></i> Cuentas guardadas
+                    </label>
+                    <select id="savedAccounts" class="form-input" style="padding: 0.75rem; border-radius: 10px; width: 100%; background: var(--bg-card); border: 1px solid var(--border-color); color: var(--text-primary);">
+                        <option value="">-- Seleccionar cuenta --</option>
+                    </select>
+                    <button type="button" class="btn btn-sm" onclick="clearSavedAccounts()" style="margin-top: 0.5rem; background: rgba(239,68,68,0.1); color: #ef4444; border: none; padding: 0.5rem 1rem; border-radius: 8px; cursor: pointer;">
+                        <i class="fas fa-trash"></i> Borrar cuentas guardadas
+                    </button>
+                </div>
+
+>>>>>>> 543ba7d (Subida limpia)
+>>>>>>> e14bce1 (Proyecto limpio sin tokens)
                 <div class="input-group">
                     <label for="email">
                         <i class="fas fa-envelope"></i> Correo Electrónico
@@ -173,7 +192,15 @@
 
                 <div class="checkbox-wrapper">
                     <input type="checkbox" id="rememberMe">
+<<<<<<< HEAD
                     <label for="rememberMe">Recordar cuenta</label>
+=======
+<<<<<<< HEAD
+                    <label for="rememberMe">Recordar cuenta</label>
+=======
+                    <label for="rememberMe">Recordar sesión</label>
+>>>>>>> 543ba7d (Subida limpia)
+>>>>>>> e14bce1 (Proyecto limpio sin tokens)
                 </div>
 
                 <button type="submit" class="btn btn-primary" style="width: 100%; padding: 1rem;">
@@ -205,7 +232,15 @@
     <script src="js/auth.js"></script>
     <script>
         document.addEventListener('DOMContentLoaded', () => {
+<<<<<<< HEAD
             fillRememberedEmail();
+=======
+<<<<<<< HEAD
+            fillRememberedEmail();
+=======
+            loadSavedAccounts();
+>>>>>>> 543ba7d (Subida limpia)
+>>>>>>> e14bce1 (Proyecto limpio sin tokens)
             loadTheme();
         });
 
@@ -229,6 +264,63 @@
             }
         }
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+        // Cargar cuentas guardadas
+        function loadSavedAccounts() {
+            const accounts = JSON.parse(localStorage.getItem('savedAccounts') || '[]');
+            const wrapper = document.getElementById('savedAccountsWrapper');
+            const select = document.getElementById('savedAccounts');
+            
+            if (accounts.length > 0) {
+                wrapper.style.display = 'block';
+                select.innerHTML = '<option value="">-- Seleccionar cuenta --</option>';
+                
+                accounts.forEach((account, index) => {
+                    const option = document.createElement('option');
+                    option.value = index;
+                    option.textContent = account.email;
+                    select.appendChild(option);
+                });
+                
+                // Si solo hay una cuenta, auto-completar
+                if (accounts.length === 1) {
+                    document.getElementById('email').value = accounts[0].email;
+                    document.getElementById('password').value = accounts[0].password;
+                    document.getElementById('rememberMe').checked = true;
+                }
+            }
+        }
+
+        // Al seleccionar una cuenta guardada
+        document.getElementById('savedAccounts').addEventListener('change', function() {
+            const index = this.value;
+            if (index !== '') {
+                const accounts = JSON.parse(localStorage.getItem('savedAccounts') || '[]');
+                if (accounts[index]) {
+                    document.getElementById('email').value = accounts[index].email;
+                    document.getElementById('password').value = accounts[index].password;
+                    document.getElementById('rememberMe').checked = true;
+                }
+            }
+        });
+
+        // Borrar cuentas guardadas
+        function clearSavedAccounts() {
+            if (confirm('¿Borrar todas las cuentas guardadas?')) {
+                localStorage.removeItem('savedAccounts');
+                document.getElementById('savedAccountsWrapper').style.display = 'none';
+                document.getElementById('email').value = '';
+                document.getElementById('password').value = '';
+                document.getElementById('rememberMe').checked = false;
+                showNotification('Cuentas guardadas eliminadas', 'info');
+            }
+        }
+
+>>>>>>> 543ba7d (Subida limpia)
+>>>>>>> e14bce1 (Proyecto limpio sin tokens)
         async function handleLogin(event) {
             event.preventDefault();
             
@@ -241,6 +333,34 @@
             submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Iniciando sesión...';
             submitBtn.disabled = true;
             
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+=======
+            // Guardar cuenta si "Recordar sesión" está marcado
+            if (rememberMe) {
+                let accounts = JSON.parse(localStorage.getItem('savedAccounts') || '[]');
+                
+                // Verificar si la cuenta ya existe
+                const existingIndex = accounts.findIndex(a => a.email === email);
+                if (existingIndex >= 0) {
+                    // Actualizar contraseña si existe
+                    accounts[existingIndex].password = password;
+                } else {
+                    // Agregar nueva cuenta
+                    accounts.push({ email, password });
+                }
+                
+                // Mantener solo las últimas 5 cuentas
+                if (accounts.length > 5) {
+                    accounts = accounts.slice(-5);
+                }
+                
+                localStorage.setItem('savedAccounts', JSON.stringify(accounts));
+            }
+            
+>>>>>>> 543ba7d (Subida limpia)
+>>>>>>> e14bce1 (Proyecto limpio sin tokens)
             const result = await loginUser(email, password, rememberMe);
             
             if (!result.success) {

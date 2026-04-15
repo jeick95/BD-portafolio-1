@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="es" data-theme="light">
+<html lang="es" data-theme="dark">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,202 +8,419 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
-    <link rel="stylesheet" href="css/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.1/aos.css">
+    <style>
+        :root {
+            --primary: #6366f1;
+            --primary-dark: #4f46e5;
+            --primary-light: #818cf8;
+            --secondary: #ec4899;
+            --accent: #06b6d4;
+            --success: #10b981;
+            --error: #ef4444;
+            --warning: #f59e0b;
+            --bg-primary: #030712;
+            --bg-secondary: #0f172a;
+            --bg-card: #1e293b;
+            --bg-card-hover: #334155;
+            --text-primary: #f8fafc;
+            --text-secondary: #94a3b8;
+            --border: #334155;
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+        }
+
+        [data-theme="light"] {
+            --bg-primary: #ffffff;
+            --bg-secondary: #f8fafc;
+            --bg-card: #ffffff;
+            --bg-card-hover: #f1f5f9;
+            --text-primary: #0f172a;
+            --text-secondary: #64748b;
+            --border: #e2e8f0;
+            --shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.15);
+        }
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        html { scroll-behavior: smooth; }
+
+        body {
+            font-family: 'Inter', sans-serif;
+            background: var(--bg-primary);
+            color: var(--text-primary);
+            line-height: 1.6;
+            overflow-x: hidden;
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: var(--bg-secondary); }
+        ::-webkit-scrollbar-thumb { background: var(--primary); border-radius: 4px; }
+
+        /* ANIMATED BG */
+        .bg-animation { position: fixed; top: 0; left: 0; width: 100%; height: 100%; z-index: -1; overflow: hidden; pointer-events: none; }
+        .bg-animation .floating-shape { position: absolute; border-radius: 50%; opacity: 0.06; animation: float 20s ease-in-out infinite; }
+        .bg-animation .shape-1 { width: 500px; height: 500px; background: var(--primary); top: -150px; right: -150px; }
+        .bg-animation .shape-2 { width: 300px; height: 300px; background: var(--secondary); bottom: 10%; left: -100px; animation-delay: -7s; }
+        @keyframes float { 0%, 100% { transform: translate(0,0) rotate(0deg); } 25% { transform: translate(40px,-40px) rotate(90deg); } 50% { transform: translate(-30px,30px) rotate(180deg); } 75% { transform: translate(20px,-20px) rotate(270deg); } }
+
+        /* NAVBAR */
+        .navbar {
+            position: fixed; top: 0; left: 0; right: 0; height: 72px;
+            background: rgba(15, 23, 42, 0.9); backdrop-filter: blur(20px);
+            border-bottom: 1px solid var(--border);
+            display: flex; align-items: center; justify-content: space-between;
+            padding: 0 2rem; z-index: 1000; transition: all 0.3s ease;
+        }
+        .navbar.scrolled { height: 64px; background: rgba(15, 23, 42, 0.98); box-shadow: var(--shadow); }
+        [data-theme="light"] .navbar { background: rgba(255, 255, 255, 0.95); }
+
+        .navbar-brand { display: flex; align-items: center; gap: 0.75rem; text-decoration: none; color: var(--text-primary); font-weight: 700; font-size: 1.1rem; transition: transform 0.3s; }
+        .navbar-brand:hover { transform: scale(1.05); }
+        .navbar-brand .logo-icon { width: 38px; height: 38px; background: linear-gradient(135deg, var(--primary), var(--secondary)); border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.1rem; }
+
+        .navbar-menu { display: flex; align-items: center; gap: 0.25rem; }
+        .nav-link { display: flex; align-items: center; gap: 0.4rem; padding: 0.5rem 0.875rem; color: var(--text-secondary); text-decoration: none; font-weight: 500; font-size: 0.875rem; border-radius: 8px; transition: all 0.3s; }
+        .nav-link:hover { color: var(--text-primary); background: var(--bg-card); transform: translateY(-2px); }
+        .nav-link.active { color: var(--primary); background: rgba(99,102,241,0.1); }
+        .nav-link i { font-size: 0.9rem; }
+
+        .navbar-actions { display: flex; align-items: center; gap: 0.75rem; }
+        .theme-btn { width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; font-size: 0.95rem; transition: all 0.3s; }
+        .theme-btn:hover { background: var(--primary); color: white; border-color: var(--primary); transform: rotate(180deg); }
+        .btn { display: inline-flex; align-items: center; gap: 0.5rem; padding: 0.5rem 1rem; font-weight: 600; font-size: 0.85rem; border-radius: 10px; text-decoration: none; cursor: pointer; transition: all 0.3s; border: none; }
+        .btn-primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); color: white; box-shadow: 0 4px 15px rgba(99,102,241,0.3); }
+        .btn-primary:hover { transform: translateY(-3px); box-shadow: 0 8px 25px rgba(99,102,241,0.5); }
+        .btn-secondary { background: linear-gradient(135deg, var(--accent), #0891b2); color: white; }
+        .btn-secondary:hover { transform: translateY(-3px); }
+        .btn-danger { background: linear-gradient(135deg, var(--error), #dc2626); color: white; }
+        .btn-danger:hover { transform: translateY(-3px); }
+        .btn-sm { padding: 0.375rem 0.75rem; font-size: 0.8rem; }
+        .btn-icon { width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-secondary); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.3s; }
+        .btn-icon:hover { background: var(--primary); color: white; border-color: var(--primary); }
+
+        .mobile-toggle { display: none; width: 38px; height: 38px; border-radius: 10px; border: 1px solid var(--border); background: var(--bg-card); color: var(--text-primary); cursor: pointer; flex-direction: column; align-items: center; justify-content: center; gap: 4px; }
+        .mobile-toggle span { width: 16px; height: 2px; background: var(--text-primary); border-radius: 1px; }
+        .mobile-menu { display: none; position: fixed; top: 72px; left: 0; right: 0; background: var(--bg-secondary); border-bottom: 1px solid var(--border); padding: 1rem; flex-direction: column; gap: 0.5rem; z-index: 999; }
+        .mobile-menu.active { display: flex; }
+        .mobile-menu .nav-link { width: 100%; justify-content: center; padding: 0.75rem; }
+
+        @media (max-width: 1024px) { .navbar-menu { display: none; } .mobile-toggle { display: flex; } }
+        @media (max-width: 768px) { .navbar { padding: 0 1rem; } }
+
+        /* MAIN CONTENT */
+        .main-content { padding: 100px 2rem 3rem; max-width: 1200px; margin: 0 auto; }
+
+        /* PAGE HEADER */
+        .page-header { text-align: center; margin-bottom: 3rem; }
+        .page-title { font-size: 2.5rem; font-weight: 800; color: var(--text-primary); margin-bottom: 0.5rem; animation: fade-up 0.8s ease-out; }
+        .page-title i { background: linear-gradient(135deg, var(--primary), var(--accent)); -webkit-background-clip: text; -webkit-text-fill-color: transparent; }
+        .page-subtitle { font-size: 1rem; color: var(--text-secondary); animation: fade-up 0.8s ease-out 0.2s both; }
+        @keyframes fade-up { 0% { transform: translateY(20px); opacity: 0; } 100% { transform: translateY(0); opacity: 1; } }
+
+        /* STATS */
+        .stats-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1.25rem; margin-bottom: 2rem; }
+        .stat-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 16px; padding: 1.5rem; display: flex; align-items: center; gap: 1rem; transition: all 0.3s; }
+        .stat-card:hover { transform: translateY(-3px); box-shadow: var(--shadow); }
+        .stat-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; color: white; font-size: 1.25rem; flex-shrink: 0; }
+        .stat-icon.primary { background: linear-gradient(135deg, var(--primary), var(--primary-dark)); }
+        .stat-icon.success { background: linear-gradient(135deg, var(--success), #059669); }
+        .stat-icon.warning { background: linear-gradient(135deg, var(--warning), #d97706); }
+        .stat-icon.info { background: linear-gradient(135deg, var(--accent), #0891b2); }
+        .stat-info h3 { font-size: 1.75rem; font-weight: 800; color: var(--text-primary); }
+        .stat-info p { font-size: 0.8rem; color: var(--text-secondary); }
+
+        /* GRID */
+        .grid { display: grid; gap: 1.5rem; }
+        .grid-2 { grid-template-columns: repeat(auto-fit, minmax(400px, 1fr)); }
+
+        /* CARD */
+        .card { background: var(--bg-card); border: 1px solid var(--border); border-radius: 20px; padding: 1.75rem; transition: all 0.3s; }
+        .card:hover { box-shadow: var(--shadow); }
+        .card-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 1.5rem; padding-bottom: 1rem; border-bottom: 1px solid var(--border); }
+        .card-title { font-size: 1.1rem; font-weight: 700; color: var(--text-primary); display: flex; align-items: center; gap: 0.5rem; }
+        .card-title i { color: var(--primary); }
+
+        /* FORM */
+        .input-group { margin-bottom: 1.25rem; }
+        .input-group label { display: block; font-weight: 600; color: var(--text-primary); font-size: 0.875rem; margin-bottom: 0.5rem; }
+        .input-wrapper { position: relative; }
+        .input-wrapper i { position: absolute; left: 1rem; top: 50%; transform: translateY(-50%); color: var(--text-secondary); font-size: 0.9rem; }
+        .input-wrapper input, .input-wrapper select { width: 100%; padding: 0.75rem 1rem 0.75rem 2.75rem; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 10px; color: var(--text-primary); font-size: 0.9rem; font-family: 'Inter', sans-serif; transition: all 0.3s; outline: none; }
+        .input-wrapper input:focus, .input-wrapper select:focus { border-color: var(--primary); box-shadow: 0 0 0 3px rgba(99,102,241,0.1); }
+        .input-wrapper select { cursor: pointer; appearance: none; }
+        .input-wrapper select option { background: var(--bg-card); color: var(--text-primary); }
+
+        /* UPLOAD ZONE */
+        .upload-zone { border: 2px dashed var(--border); border-radius: 16px; padding: 2.5rem 1rem; text-align: center; cursor: pointer; transition: all 0.3s; background: var(--bg-secondary); }
+        .upload-zone:hover { border-color: var(--primary); background: rgba(99,102,241,0.05); transform: scale(1.01); }
+        .upload-zone.dragover { border-color: var(--primary); background: rgba(99,102,241,0.1); transform: scale(1.02); }
+        .upload-zone i { font-size: 2.5rem; color: var(--primary); margin-bottom: 0.75rem; }
+        .upload-zone h3 { font-size: 1rem; font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem; }
+        .upload-zone p { font-size: 0.8rem; color: var(--text-secondary); }
+
+        /* SELECTED FILE */
+        .selected-file { display: flex; align-items: center; gap: 0.75rem; padding: 0.875rem 1rem; background: rgba(99,102,241,0.1); border: 1px solid rgba(99,102,241,0.2); border-radius: 10px; margin-top: 1rem; }
+        .selected-file i { color: var(--primary); font-size: 1.25rem; }
+        .selected-file .file-name { flex: 1; font-size: 0.875rem; font-weight: 500; color: var(--text-primary); }
+        .selected-file .file-size { font-size: 0.75rem; color: var(--text-secondary); }
+        .selected-file .remove-file { width: 28px; height: 28px; border-radius: 8px; border: none; background: rgba(239,68,68,0.1); color: var(--error); cursor: pointer; display: flex; align-items: center; justify-content: center; transition: all 0.2s; }
+        .selected-file .remove-file:hover { background: var(--error); color: white; }
+
+        /* FILE LIST */
+        .files-list { display: flex; flex-direction: column; gap: 0.75rem; max-height: 400px; overflow-y: auto; }
+        .file-item { display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; transition: all 0.3s; }
+        .file-item:hover { border-color: var(--primary); transform: translateX(5px); }
+        .file-icon { width: 44px; height: 44px; border-radius: 10px; background: linear-gradient(135deg, var(--primary), var(--primary-dark)); display: flex; align-items: center; justify-content: center; color: white; font-size: 1.1rem; flex-shrink: 0; }
+        .file-info { flex: 1; min-width: 0; }
+        .file-name { font-weight: 600; color: var(--text-primary); font-size: 0.9rem; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+        .file-meta { font-size: 0.8rem; color: var(--text-secondary); display: flex; align-items: center; gap: 0.5rem; margin-top: 0.2rem; }
+        .file-actions { display: flex; gap: 0.5rem; }
+
+        /* USER LIST */
+        .users-list { display: flex; flex-direction: column; gap: 0.75rem; max-height: 400px; overflow-y: auto; }
+        .user-item { display: flex; align-items: center; gap: 1rem; padding: 1rem; background: var(--bg-secondary); border: 1px solid var(--border); border-radius: 12px; transition: all 0.3s; }
+        .user-item:hover { border-color: var(--primary); }
+        .user-avatar { width: 44px; height: 44px; border-radius: 12px; background: linear-gradient(135deg, var(--primary), var(--secondary)); display: flex; align-items: center; justify-content: center; color: white; font-weight: 700; font-size: 1rem; flex-shrink: 0; }
+        .user-info { flex: 1; min-width: 0; }
+        .user-name { font-weight: 600; color: var(--text-primary); font-size: 0.9rem; }
+        .user-email { font-size: 0.8rem; color: var(--text-secondary); }
+        .badge { padding: 0.3rem 0.75rem; border-radius: 50px; font-size: 0.75rem; font-weight: 600; }
+        .badge-admin { background: rgba(99,102,241,0.1); color: var(--primary); }
+        .badge-user { background: rgba(16,185,129,0.1); color: var(--success); }
+
+        /* EMPTY STATE */
+        .empty-state { text-align: center; padding: 3rem 1rem; color: var(--text-secondary); }
+        .empty-state i { font-size: 3rem; margin-bottom: 1rem; color: var(--border); }
+        .empty-state p { font-size: 0.9rem; }
+
+        /* LOADING */
+        .loading-spinner { display: flex; align-items: center; justify-content: center; padding: 3rem; }
+        .spinner { width: 40px; height: 40px; border: 3px solid var(--border); border-top-color: var(--primary); border-radius: 50%; animation: spin 0.8s linear infinite; }
+        @keyframes spin { to { transform: rotate(360deg); } }
+
+        /* NOTIFICATION */
+        .notification { position: fixed; bottom: 2rem; right: 2rem; padding: 1rem 1.5rem; border-radius: 12px; display: flex; align-items: center; gap: 0.75rem; font-weight: 600; font-size: 0.9rem; z-index: 9999; animation: slide-in 0.3s ease-out; box-shadow: var(--shadow); }
+        .notification.success { background: var(--success); color: white; }
+        .notification.error { background: var(--error); color: white; }
+        .notification.info { background: var(--primary); color: white; }
+        @keyframes slide-in { 0% { transform: translateX(100%); opacity: 0; } 100% { transform: translateX(0); opacity: 1; } }
+
+        /* ACCESS DENIED */
+        .access-denied { display: none; flex-direction: column; align-items: center; justify-content: center; min-height: 60vh; text-align: center; padding: 2rem; }
+        .access-denied.show { display: flex; }
+        .access-denied i { font-size: 4rem; color: var(--error); margin-bottom: 1.5rem; }
+        .access-denied h2 { font-size: 1.5rem; font-weight: 700; color: var(--text-primary); margin-bottom: 0.5rem; }
+        .access-denied p { color: var(--text-secondary); margin-bottom: 1.5rem; }
+
+        /* UPLOAD PROGRESS */
+        .upload-progress { display: none; margin-top: 1rem; padding: 1rem; background: var(--bg-secondary); border-radius: 10px; }
+        .upload-progress.active { display: block; }
+        .progress-bar { width: 100%; height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; margin-bottom: 0.5rem; }
+        .progress-fill { height: 100%; background: linear-gradient(90deg, var(--primary), var(--accent)); border-radius: 4px; transition: width 0.3s ease; width: 0%; }
+        .progress-text { font-size: 0.8rem; color: var(--text-secondary); text-align: center; }
+
+        @media (max-width: 768px) {
+            .grid-2 { grid-template-columns: 1fr; }
+            .stats-grid { grid-template-columns: repeat(2, 1fr); }
+            .file-item, .user-item { flex-wrap: wrap; }
+        }
+    </style>
 </head>
 <body>
-    <nav class="navbar">
+    <div class="bg-animation">
+        <div class="floating-shape shape-1"></div>
+        <div class="floating-shape shape-2"></div>
+    </div>
+
+    <!-- NAVBAR -->
+    <nav class="navbar" id="navbar">
         <a href="index.html" class="navbar-brand">
-            <i class="fas fa-database"></i>
-            Base de Datos II
+            <div class="logo-icon"><i class="fas fa-database"></i></div>
+            <span>Base de Datos II</span>
         </a>
         <div class="navbar-menu">
             <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Inicio</a>
+            <a href="database.html" class="nav-link"><i class="fas fa-server"></i> Base de Datos</a>
             <a href="proyecto.html" class="nav-link"><i class="fas fa-folder-open"></i> Proyectos</a>
-            <a href="dashboard.html" class="nav-link active" style="background: var(--gradient-primary); color: white;"><i class="fas fa-cog"></i> Dashboard</a>
+            <a href="dashboard.html" class="nav-link active"><i class="fas fa-cog"></i> Dashboard</a>
         </div>
         <div class="navbar-actions">
-            <button class="theme-toggle" onclick="toggleTheme()"><i class="fas fa-moon"></i></button>
-            <a href="profile.html" class="nav-link"><i class="fas fa-user"></i> Perfil</a>
-            <button onclick="logoutUser()" class="btn-icon" title="Cerrar sesión">
-                <i class="fas fa-sign-out-alt"></i>
-            </button>
+            <button class="theme-btn" onclick="toggleTheme()" title="Cambiar tema"><i class="fas fa-moon" id="themeIcon"></i></button>
+            <a href="profile.html" class="btn-icon" title="Perfil"><i class="fas fa-user"></i></a>
+            <button onclick="logoutUser()" class="btn-icon" title="Cerrar sesión" style="color: var(--error);"><i class="fas fa-sign-out-alt"></i></button>
+            <button class="mobile-toggle" id="mobileToggle" onclick="toggleMobileMenu()"><span></span><span></span><span></span></button>
         </div>
     </nav>
 
-    <div class="main-content">
+    <div class="mobile-menu" id="mobileMenu">
+        <a href="index.html" class="nav-link"><i class="fas fa-home"></i> Inicio</a>
+        <a href="database.html" class="nav-link"><i class="fas fa-server"></i> Base de Datos</a>
+        <a href="proyecto.html" class="nav-link"><i class="fas fa-folder-open"></i> Proyectos</a>
+        <a href="dashboard.html" class="nav-link active"><i class="fas fa-cog"></i> Dashboard</a>
+        <a href="profile.html" class="nav-link"><i class="fas fa-user"></i> Perfil</a>
+        <button onclick="logoutUser()" class="nav-link" style="background:none;border:none;cursor:pointer;color:var(--error);"><i class="fas fa-sign-out-alt"></i> Cerrar Sesión</button>
+    </div>
+
+    <!-- ACCESS DENIED -->
+    <div class="access-denied" id="accessDenied">
+        <i class="fas fa-shield-alt"></i>
+        <h2>Acceso Denegado</h2>
+        <p>No tienes permisos de administrador para acceder a esta página.</p>
+        <a href="index.html" class="btn btn-primary"><i class="fas fa-home"></i> Volver al Inicio</a>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div class="main-content" id="mainContent">
         <div class="page-header">
-            <h1 class="page-title">
-                <i class="fas fa-cog"></i>
-                Panel de Administración
-            </h1>
-            <p class="page-subtitle">Gestiona archivos, usuarios y contenido del sitio</p>
+            <h1 class="page-title" data-aos="fade-up"><i class="fas fa-cog"></i> Panel de Administración</h1>
+            <p class="page-subtitle" data-aos="fade-up" data-aos-delay="100">Gestiona archivos, usuarios y contenido del sitio</p>
         </div>
 
+        <!-- STATS -->
         <div class="stats-grid">
-            <div class="stat-card">
-                <div class="stat-icon primary">
-                    <i class="fas fa-folder"></i>
-                </div>
+            <div class="stat-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="stat-icon primary"><i class="fas fa-folder"></i></div>
                 <div class="stat-info">
                     <h3 id="totalFiles">0</h3>
                     <p>Archivos Subidos</p>
                 </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-icon success">
-                    <i class="fas fa-users"></i>
-                </div>
+            <div class="stat-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="stat-icon success"><i class="fas fa-users"></i></div>
                 <div class="stat-info">
                     <h3 id="totalUsers">0</h3>
-                    <p>Usuarios Registrados</p>
+                    <p>Usuarios</p>
                 </div>
             </div>
-            <div class="stat-card">
-                <div class="stat-icon warning">
-                    <i class="fas fa-eye"></i>
-                </div>
-                <div class="stat-info">
-                    <h3 id="totalViews">0</h3>
-                    <p>Visitas Totales</p>
-                </div>
-            </div>
-            <div class="stat-card">
-                <div class="stat-icon info">
-                    <i class="fas fa-clock"></i>
-                </div>
+            <div class="stat-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="stat-icon warning"><i class="fas fa-clock"></i></div>
                 <div class="stat-info">
                     <h3 id="lastUpdate">--:--</h3>
                     <p>Última Actualización</p>
                 </div>
             </div>
+            <div class="stat-card" data-aos="fade-up" data-aos-delay="400">
+                <div class="stat-icon info"><i class="fas fa-check-circle"></i></div>
+                <div class="stat-info">
+                    <h3>100%</h3>
+                    <p>Completado</p>
+                </div>
+            </div>
         </div>
 
-        <div class="grid grid-2" style="gap: 2rem;">
-            <div class="card">
+        <div class="grid grid-2">
+            <!-- UPLOAD FORM -->
+            <div class="card" data-aos="fade-up">
                 <div class="card-header">
-                    <h3 class="card-title">
-                        <i class="fas fa-cloud-upload-alt"></i>
-                        Subir Archivos
-                    </h3>
+                    <h3 class="card-title"><i class="fas fa-cloud-upload-alt"></i> Subir Archivo</h3>
+                    <button type="button" class="btn btn-secondary btn-sm" onclick="showGitHubConfig()" title="Configurar GitHub" id="githubStatusBtn">
+                        <i class="fab fa-github"></i> <span id="githubStatusText">GitHub</span>
+                    </button>
                 </div>
-
                 <form id="uploadForm">
                     <div class="input-group">
-                        <label for="fileTitle">Título del Archivo</label>
+                        <label for="fileTitle">Título del Proyecto</label>
                         <div class="input-wrapper">
                             <i class="fas fa-file-alt"></i>
                             <input type="text" id="fileTitle" placeholder="Ej: Semana 1 - Portafolio" required>
                         </div>
                     </div>
-
                     <div class="input-group">
-                        <label for="weekSelect">Semana</label>
+                        <label for="weekSelect">Semana / Unidad</label>
                         <div class="input-wrapper">
                             <i class="fas fa-calendar-week"></i>
                             <select id="weekSelect" required>
-                                <option value="">Seleccionar semana...</option>
-                                <option value="semana1">Semana 1 - Portafolio</option>
-                                <option value="semana2">Semana 2 - Métodos</option>
-                                <option value="semana3">Semana 3 - POO</option>
-                                <option value="semana4">Semana 4 - MVC</option>
-                                <option value="semana5">Semana 5 - Login</option>
-                                <option value="semana6">Semana 6 - Base de Datos</option>
-                                <option value="semana7">Semana 7 - Sistema de Reservas</option>
-                                <option value="semana8">Semana 8 - Proyecto Final</option>
+                                <option value="">Seleccionar...</option>
+                                <option value="1">Semana 1 - Portafolio</option>
+                                <option value="2">Semana 2 - Métodos</option>
+                                <option value="3">Semana 3 - POO</option>
+                                <option value="4">Semana 4 - MVC</option>
+                                <option value="5">Semana 5 - Login</option>
+                                <option value="6">Semana 6 - Base de Datos</option>
+                                <option value="7">Semana 7-8 - Proyecto Reservas</option>
+                                <option value="9">Semana 9 - Figma</option>
+                                <option value="10">Semana 10 - JSP</option>
+                                <option value="11">Semana 11 - Modelos</option>
+                                <option value="12">Semana 12 - Controladores</option>
+                                <option value="13">Semana 13 - BD Final</option>
+                                <option value="14">Semana 14 - Reportes</option>
+                                <option value="15">Semana 15 - Proyecto Final</option>
                             </select>
                         </div>
                     </div>
-
                     <div class="input-group">
-                        <label for="fileDescription">Descripción</label>
+                        <label for="courseInput">Curso</label>
+                        <div class="input-wrapper">
+                            <i class="fas fa-graduation-cap"></i>
+                            <input type="text" id="courseInput" placeholder="Ej: Base de Datos II" value="Base de Datos II">
+                        </div>
+                    </div>
+                    <div class="input-group">
+                        <label for="fileDescription">Descripción (opcional)</label>
                         <div class="input-wrapper">
                             <i class="fas fa-info-circle"></i>
                             <input type="text" id="fileDescription" placeholder="Descripción breve del archivo">
                         </div>
                     </div>
-
-                    <div class="upload-zone" onclick="document.getElementById('fileInput').click()">
+                    <div class="input-group">
+                        <label for="repoUrl">URL del Repositorio (GitHub)</label>
+                        <div class="input-wrapper">
+                            <i class="fab fa-github"></i>
+                            <input type="url" id="repoUrl" placeholder="https://github.com/usuario/proyecto">
+                        </div>
+                    </div>
+                    <div class="upload-zone" id="uploadZone">
                         <i class="fas fa-cloud-upload-alt"></i>
                         <h3>Arrastra archivos aquí o haz clic</h3>
-                        <p>PDF, ZIP, RAR, documentos (máx. 50MB)</p>
+                        <p>PDF, ZIP, RAR, imágenes (máx. 50MB)</p>
                         <input type="file" id="fileInput" style="display: none;">
                     </div>
-
-                    <div id="selectedFile" style="margin-top: 1rem; display: none; padding: 1rem; background: var(--bg-input); border-radius: var(--radius-md); text-align: center;">
+                    <div class="selected-file" id="selectedFile">
                         <i class="fas fa-file"></i>
-                        <span id="fileName"></span>
+                        <span class="file-name" id="fileName"></span>
+                        <span class="file-size" id="fileSize"></span>
+                        <button type="button" class="remove-file" onclick="removeFile()"><i class="fas fa-times"></i></button>
                     </div>
-
-                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;">
-                        <i class="fas fa-upload"></i>
-                        Subir Archivo
+                    <div class="upload-progress" id="uploadProgress">
+                        <div class="progress-bar"><div class="progress-fill" id="progressFill"></div></div>
+                        <p class="progress-text" id="progressText">Subiendo...</p>
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 1rem;" id="submitBtn">
+                        <i class="fas fa-upload"></i> Subir Archivo
                     </button>
                 </form>
             </div>
 
-            <div class="card">
+            <!-- FILES LIST -->
+            <div class="card" data-aos="fade-up">
                 <div class="card-header">
-                    <h3 class="card-title">
-                        <i class="fas fa-file-alt"></i>
-                        Archivos Recientes
-                    </h3>
-                    <button class="btn btn-secondary btn-sm" onclick="loadFiles()">
-                        <i class="fas fa-sync-alt"></i> Actualizar
-                    </button>
+                    <h3 class="card-title"><i class="fas fa-file-alt"></i> Archivos Subidos</h3>
+                    <button class="btn btn-secondary btn-sm" onclick="loadFiles()"><i class="fas fa-sync-alt"></i> Actualizar</button>
                 </div>
-
                 <div id="filesList">
-                    <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
-                        <i class="fas fa-folder-open" style="font-size: 3rem; margin-bottom: 1rem;"></i>
-                        <p>No hay archivos subidos</p>
-                    </div>
+                    <div class="loading-spinner"><div class="spinner"></div></div>
                 </div>
             </div>
 
-            <div class="card">
+            <!-- USERS LIST -->
+            <div class="card" data-aos="fade-up">
                 <div class="card-header">
-                    <h3 class="card-title">
-                        <i class="fas fa-users-cog"></i>
-                        Gestión de Usuarios
-                    </h3>
+                    <h3 class="card-title"><i class="fas fa-users-cog"></i> Usuarios Registrados</h3>
+                    <button class="btn btn-secondary btn-sm" onclick="loadUsers()"><i class="fas fa-sync-alt"></i> Actualizar</button>
                 </div>
-
                 <div id="usersList">
-                    <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
-                        <i class="fas fa-users" style="font-size: 3rem; margin-bottom: 1rem;"></i>
-                        <p>Cargando usuarios...</p>
-                    </div>
+                    <div class="loading-spinner"><div class="spinner"></div></div>
                 </div>
             </div>
 
-            <div class="card">
+            <!-- ACTIVITY LOG -->
+            <div class="card" data-aos="fade-up">
                 <div class="card-header">
-                    <h3 class="card-title">
-                        <i class="fas fa-history"></i>
-                        Actividad Reciente
-                    </h3>
+                    <h3 class="card-title"><i class="fas fa-history"></i> Actividad Reciente</h3>
                 </div>
-
                 <div id="activityLog">
-                    <div class="activity-item">
-                        <div class="activity-icon login">
-                            <i class="fas fa-upload"></i>
-                        </div>
-                        <div class="activity-content">
-                            <h4>Archivo subido</h4>
-                            <p>Semana 1 - portafolio.pdf</p>
-                            <span class="activity-time">Hace 5 min</span>
-                        </div>
-                    </div>
-                    <div class="activity-item">
-                        <div class="activity-icon upload">
-                            <i class="fas fa-user-plus"></i>
-                        </div>
-                        <div class="activity-content">
-                            <h4>Nuevo usuario registrado</h4>
-                            <p>usuario@example.com</p>
-                            <span class="activity-time">Hace 1 hora</span>
-                        </div>
+                    <div style="text-align: center; padding: 2rem; color: var(--text-secondary);">
+                        <i class="fas fa-history" style="font-size: 2rem; margin-bottom: 0.5rem; opacity: 0.3;"></i>
+                        <p>Sin actividad reciente</p>
                     </div>
                 </div>
             </div>
@@ -211,291 +428,558 @@
     </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.1/aos.js"></script>
     <script src="js/config.js"></script>
     <script src="js/auth.js"></script>
-    <style>
-        .activity-item {
-            display: flex;
-            align-items: flex-start;
-            gap: 1rem;
-            padding: 1rem;
-            background: var(--bg-secondary);
-            border-radius: var(--radius-md);
-            margin-bottom: 0.75rem;
-        }
-        .activity-icon {
-            width: 40px;
-            height: 40px;
-            border-radius: var(--radius-md);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-size: 1rem;
-        }
-        .activity-icon.login { background: linear-gradient(135deg, #6366f1 0%, #4f46e5 100%); }
-        .activity-icon.upload { background: linear-gradient(135deg, #10b981 0%, #059669 100%); }
-        .activity-content h4 { font-weight: 600; color: var(--text-primary); margin-bottom: 0.25rem; }
-        .activity-content p { font-size: 0.85rem; color: var(--text-secondary); }
-        .activity-time { font-size: 0.75rem; color: var(--text-light); }
-    </style>
     <script>
-        document.addEventListener('DOMContentLoaded', () => {
-            loadTheme();
-            loadDashboard();
+        AOS.init({ duration: 600, easing: 'ease-out', once: true });
+
+        // Theme
+        function toggleTheme() {
+            const html = document.documentElement;
+            const newTheme = html.getAttribute('data-theme') === 'dark' ? 'light' : 'dark';
+            html.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            document.getElementById('themeIcon').className = newTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+        }
+        const savedTheme = localStorage.getItem('theme') || 'dark';
+        document.documentElement.setAttribute('data-theme', savedTheme);
+        document.getElementById('themeIcon').className = savedTheme === 'dark' ? 'fas fa-moon' : 'fas fa-sun';
+
+        // Mobile Menu
+        function toggleMobileMenu() {
+            document.getElementById('mobileMenu').classList.toggle('active');
+        }
+
+        // Navbar scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.getElementById('navbar');
+            if (window.scrollY > 50) navbar.classList.add('scrolled');
+            else navbar.classList.remove('scrolled');
         });
 
-        function loadTheme() {
-            const savedTheme = localStorage.getItem('theme') || 'light';
-            document.documentElement.setAttribute('data-theme', savedTheme);
+        // Notification
+        function showNotification(message, type = 'info') {
+            const existing = document.querySelector('.notification');
+            if (existing) existing.remove();
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `<i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'info-circle'}"></i><span>${message}</span>`;
+            document.body.appendChild(notification);
+            setTimeout(() => { notification.style.animation = 'slide-in 0.3s ease-out reverse'; setTimeout(() => notification.remove(), 300); }, 4000);
         }
 
-        function toggleTheme() {
-            const currentTheme = document.documentElement.getAttribute('data-theme');
-            const newTheme = currentTheme === 'light' ? 'dark' : 'light';
-            document.documentElement.setAttribute('data-theme', newTheme);
-            localStorage.setItem('theme', newTheme);
+        // Check admin access - verifica por email directamente
+        async function checkAdminAccess() {
+            const adminEmails = ['luffyjeick95074ku@gmail.com', 'aranda@gmail.com', 't01256d@ms.upla.edu.pe'];
+            
+            // Obtener usuario de sessionStorage
+            const sessionUser = JSON.parse(sessionStorage.getItem('user'));
+            
+            // Obtener usuario de Supabase Auth
+            const { data: { user } } = await supabase.auth.getUser();
+            
+            // Verificar si es admin por email
+            const userEmail = user?.email || sessionUser?.email;
+            
+            if (!userEmail) {
+                showNotification('Debes iniciar sesión', 'error');
+                window.location.href = 'login.html';
+                return false;
+            }
+            
+            if (!adminEmails.includes(userEmail)) {
+                document.getElementById('accessDenied').classList.add('show');
+                document.getElementById('mainContent').style.display = 'none';
+                return false;
+            }
+            
+            return true;
         }
 
-        async function loadDashboard() {
-            const isAdminUser = await checkAdminAccess();
-            if (!isAdminUser) return;
+        // Actualizar estado del botón de GitHub
+        function updateGitHubStatus() {
+            const token = localStorage.getItem('github_token');
+            const btn = document.getElementById('githubStatusBtn');
+            const text = document.getElementById('githubStatusText');
+            
+            if (token) {
+                btn.style.background = 'linear-gradient(135deg, #10b981, #059669)';
+                text.textContent = '✓ GitHub';
+            } else {
+                btn.style.background = 'linear-gradient(135deg, var(--accent), #0891b2)';
+                text.textContent = 'GitHub';
+            }
+        }
 
+        // Init
+        async function initDashboard() {
+            const hasAccess = await checkAdminAccess();
+            if (!hasAccess) return;
+            updateGitHubStatus();
             await loadFiles();
             await loadUsers();
             updateStats();
         }
 
-        async function checkAdminAccess() {
-            const user = JSON.parse(sessionStorage.getItem('user'));
-            if (!user) {
-                window.location.href = 'login.html';
-                return false;
-            }
+        document.addEventListener('DOMContentLoaded', initDashboard);
 
-            const isAdminUser = await isAdmin(user.id);
-            if (!isAdminUser) {
-                showNotification('No tienes permisos de administrador', 'error');
-                setTimeout(() => window.location.href = 'index.html', 2000);
-                return false;
-            }
-            return true;
-        }
-
+        // Load Files
         async function loadFiles() {
+            const filesList = document.getElementById('filesList');
+            filesList.innerHTML = '<div class="loading-spinner"><div class="spinner"></div></div>';
             try {
                 const { data, error } = await supabase
                     .from('trabajos')
                     .select('*')
                     .order('created_at', { ascending: false });
 
-                if (error && error.code !== 'PGRST116') throw error;
-
-                const filesList = document.getElementById('filesList');
-                
-                if (!data || data.length === 0) {
-                    filesList.innerHTML = `
-                        <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
-                            <i class="fas fa-folder-open" style="font-size: 3rem; margin-bottom: 1rem;"></i>
-                            <p>No hay archivos subidos</p>
-                        </div>
-                    `;
+                if (error) {
+                    filesList.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Error al cargar: ${error.message}</p></div>`;
                     return;
                 }
 
-                filesList.innerHTML = data.map(file => `
+                document.getElementById('totalFiles').textContent = data?.length || 0;
+
+                if (!data || data.length === 0) {
+                    filesList.innerHTML = '<div class="empty-state"><i class="fas fa-folder-open"></i><p>No hay archivos subidos</p></div>';
+                    return;
+                }
+
+                filesList.innerHTML = '<div class="files-list">' + data.map(file => `
                     <div class="file-item">
-                        <div class="file-icon">
-                            <i class="fas fa-file-pdf"></i>
-                        </div>
+                        <div class="file-icon"><i class="fas fa-file-code"></i></div>
                         <div class="file-info">
-                            <div class="file-name">${file.titulo || file.nombre}</div>
-                            <div class="file-meta">Semana ${file.semana || '?'} - ${file.curso || 'General'}</div>
+                            <div class="file-name">${escapeHtml(file.titulo || 'Sin título')}</div>
+                            <div class="file-meta">
+                                <span><i class="fas fa-calendar-week"></i> Semana ${file.semana || 'N/A'}</span>
+                                <span><i class="fas fa-book"></i> ${escapeHtml(file.curso || 'General')}</span>
+                            </div>
+                            ${file.url ? `<a href="${escapeHtml(file.url)}" target="_blank" class="btn btn-sm" style="margin-top:0.3rem;background:rgba(99,102,241,0.1);color:var(--primary);"><i class="fas fa-external-link-alt"></i> Ver</a>` : ''}
                         </div>
                         <div class="file-actions">
-                            <button class="btn-icon btn-sm" onclick="editFile('${file.id}')" title="Editar">
-                                <i class="fas fa-edit"></i>
-                            </button>
-                            <button class="btn-icon btn-sm" onclick="deleteFile('${file.id}')" title="Eliminar" style="background: rgba(239, 68, 68, 0.1); color: var(--error);">
-                                <i class="fas fa-trash"></i>
-                            </button>
+                            ${file.github_url ? `<a href="${escapeHtml(file.github_url)}" target="_blank" class="btn-icon btn-sm" title="GitHub"><i class="fab fa-github"></i></a>` : ''}
+                            ${file.repositorio_url && !file.github_url ? `<a href="${escapeHtml(file.repositorio_url)}" target="_blank" class="btn-icon btn-sm" title="GitHub"><i class="fab fa-github"></i></a>` : ''}
+                            <button class="btn-icon btn-sm" onclick="editFile('${file.id}')" title="Editar" style="color:var(--primary);"><i class="fas fa-edit"></i></button>
+                            <button class="btn-icon btn-sm" onclick="deleteFile('${file.id}')" title="Eliminar" style="color:var(--error);"><i class="fas fa-trash"></i></button>
                         </div>
                     </div>
-                `).join('');
-
-                document.getElementById('totalFiles').textContent = data.length;
-
-            } catch (error) {
-                console.error('Error al cargar archivos:', error);
+                `).join('') + '</div>';
+            } catch (err) {
+                filesList.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Error: ${err.message}</p></div>`;
             }
         }
 
+        // Load Users
         async function loadUsers() {
+            const usersList = document.getElementById('usersList');
+            usersList.innerHTML = '<div class="loading-spinner"><div class="spinner"></div></div>';
             try {
                 const { data, error } = await supabase
                     .from('perfiles')
                     .select('*')
                     .order('created_at', { ascending: false });
 
-                if (error && error.code !== 'PGRST116') throw error;
-
-                const usersList = document.getElementById('usersList');
-                
-                if (!data || data.length === 0) {
-                    usersList.innerHTML = `
-                        <div style="text-align: center; padding: 3rem; color: var(--text-secondary);">
-                            <i class="fas fa-users" style="font-size: 3rem; margin-bottom: 1rem;"></i>
-                            <p>No hay usuarios registrados</p>
-                        </div>
-                    `;
+                if (error) {
+                    usersList.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Error: ${error.message}</p></div>`;
                     return;
                 }
 
-                usersList.innerHTML = data.map(user => `
-                    <div class="user-item" style="display: flex; align-items: center; justify-content: space-between; padding: 1rem; background: var(--bg-secondary); border-radius: var(--radius-md); margin-bottom: 0.5rem;">
-                        <div style="display: flex; align-items: center; gap: 1rem;">
-                            <div class="user-avatar">${(user.nombre || 'U').charAt(0).toUpperCase()}</div>
-                            <div>
-                                <h4 style="font-weight: 600; color: var(--text-primary);">${user.nombre || 'Usuario'}</h4>
-                                <p style="font-size: 0.85rem; color: var(--text-secondary);">${user.email}</p>
-                            </div>
+                document.getElementById('totalUsers').textContent = data?.length || 0;
+
+                if (!data || data.length === 0) {
+                    usersList.innerHTML = '<div class="empty-state"><i class="fas fa-users"></i><p>No hay usuarios</p></div>';
+                    return;
+                }
+
+                usersList.innerHTML = '<div class="users-list">' + data.map(user => `
+                    <div class="user-item">
+                        <div class="user-avatar">${(user.nombre || 'U').charAt(0).toUpperCase()}</div>
+                        <div class="user-info">
+                            <div class="user-name">${escapeHtml(user.nombre || 'Usuario')}</div>
+                            <div class="user-email">${escapeHtml(user.email || 'Sin email')}</div>
                         </div>
-                        <span class="badge badge-${user.rol === 'admin' ? 'primary' : 'success'}">
+                        <span class="badge ${user.rol === 'admin' ? 'badge-admin' : 'badge-user'}">
                             <i class="fas fa-${user.rol === 'admin' ? 'crown' : 'user'}"></i>
                             ${user.rol || 'usuario'}
                         </span>
                     </div>
-                `).join('');
-
-                document.getElementById('totalUsers').textContent = data.length;
-
-            } catch (error) {
-                console.error('Error al cargar usuarios:', error);
+                `).join('') + '</div>';
+            } catch (err) {
+                usersList.innerHTML = `<div class="empty-state"><i class="fas fa-exclamation-triangle"></i><p>Error: ${err.message}</p></div>`;
             }
         }
 
-        async function uploadFile() {
-            const fileInput = document.getElementById('fileInput');
-            const title = document.getElementById('fileTitle').value;
-            const week = document.getElementById('weekSelect').value;
-            const description = document.getElementById('fileDescription').value;
+        // Upload File
+        let selectedFileData = null;
 
-            if (!fileInput.files[0]) {
-                showNotification('Por favor selecciona un archivo', 'error');
+        document.getElementById('fileInput').addEventListener('change', function(e) {
+            if (this.files && this.files[0]) {
+                selectedFileData = this.files[0];
+                document.getElementById('fileName').textContent = this.files[0].name;
+                document.getElementById('fileSize').textContent = formatFileSize(this.files[0].size);
+                document.getElementById('selectedFile').style.display = 'flex';
+            }
+        });
+
+        const uploadZone = document.getElementById('uploadZone');
+        uploadZone.addEventListener('click', () => document.getElementById('fileInput').click());
+        uploadZone.addEventListener('dragover', e => { e.preventDefault(); uploadZone.classList.add('dragover'); });
+        uploadZone.addEventListener('dragleave', () => uploadZone.classList.remove('dragover'));
+        uploadZone.addEventListener('drop', e => {
+            e.preventDefault();
+            uploadZone.classList.remove('dragover');
+            if (e.dataTransfer.files && e.dataTransfer.files[0]) {
+                document.getElementById('fileInput').files = e.dataTransfer.files;
+                const file = e.dataTransfer.files[0];
+                selectedFileData = file;
+                document.getElementById('fileName').textContent = file.name;
+                document.getElementById('fileSize').textContent = formatFileSize(file.size);
+                document.getElementById('selectedFile').style.display = 'flex';
+            }
+        });
+
+        function removeFile() {
+            document.getElementById('fileInput').value = '';
+            selectedFileData = null;
+            document.getElementById('selectedFile').style.display = 'none';
+        }
+
+        document.getElementById('uploadForm').addEventListener('submit', async function(e) {
+            e.preventDefault();
+
+            const title = document.getElementById('fileTitle').value.trim();
+            const semana = document.getElementById('weekSelect').value;
+            const curso = document.getElementById('courseInput').value.trim();
+            const descripcion = document.getElementById('fileDescription').value.trim();
+            const repoUrl = document.getElementById('repoUrl').value.trim();
+
+            if (!title) { showNotification('Ingresa un título', 'error'); return; }
+            if (!semana) { showNotification('Selecciona una semana', 'error'); return; }
+
+            // Verificar usuario
+            const userSession = JSON.parse(sessionStorage.getItem('user'));
+            console.log('User from sessionStorage:', userSession);
+
+            const { data: { user: authUser } } = await supabase.auth.getUser();
+            console.log('User from Supabase Auth:', authUser);
+
+            if (!userSession && !authUser) {
+                showNotification('Debes iniciar sesión nuevamente', 'error');
+                window.location.href = 'login.html';
                 return;
             }
 
-            const file = fileInput.files[0];
-            const fileName = `${Date.now()}_${file.name}`;
+            let userId = null;
+            if (userSession && userSession.id) {
+                userId = userSession.id;
+            } else if (userSession && userSession.user_id) {
+                userId = userSession.user_id;
+            } else if (authUser && authUser.id) {
+                userId = authUser.id;
+            }
+
+            console.log('User ID obtenido:', userId);
+
+            const file = selectedFileData;
+            const submitBtn = document.getElementById('submitBtn');
+            const progress = document.getElementById('uploadProgress');
+            const progressFill = document.getElementById('progressFill');
+            const progressText = document.getElementById('progressText');
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Subiendo...';
+            progress.classList.add('active');
+            progressFill.style.width = '10%';
+            progressText.textContent = 'Preparando...';
 
             try {
-                const { error: uploadError } = await supabase.storage
-                    .from('archivos')
-                    .upload(fileName, file);
+                let archivoUrl = '';
+                let archivoPath = '';
+                let githubUrl = '';
 
-                if (uploadError) throw uploadError;
+                if (file) {
+                    progressFill.style.width = '25%';
+                    progressText.textContent = 'Subiendo a Supabase Storage...';
 
-                const { data } = supabase.storage.from('archivos').getPublicUrl(fileName);
+                    const fileExt = file.name.split('.').pop();
+                    const safeFileName = `${Date.now()}_${title.replace(/[^a-zA-Z0-9]/g, '_')}.${fileExt}`;
 
-                const { data: { user } } = await supabase.auth.getUser();
+                    const { data: uploadData, error: uploadError } = await supabase.storage
+                        .from('archivos')
+                        .upload(safeFileName, file, { cacheControl: '3600', upsert: false });
 
-                const { error: dbError } = await supabase
-                    .from('trabajos')
-                    .insert([
-                        {
-                            titulo: title,
-                            semana: week,
-                            descripcion: description,
-                            url: data.publicUrl,
-                            nombre: fileName,
-                            user_id: user.id
+                    if (uploadError && uploadError.error !== 'Payload too large') {
+                        console.warn('Storage warning:', uploadError);
+                    }
+
+                    const { data: urlData } = supabase.storage.from('archivos').getPublicUrl(safeFileName);
+                    archivoUrl = urlData.publicUrl;
+                    archivoPath = safeFileName;
+
+                    progressFill.style.width = '45%';
+
+                    // Subir a GitHub
+                    progressText.textContent = 'Subiendo a GitHub...';
+
+                    const githubToken = getGitHubToken();
+                    if (!githubToken) {
+                        showNotification('Token de GitHub requerido para continuar', 'error');
+                        progress.classList.remove('active');
+                        progressFill.style.width = '0%';
+                        submitBtn.disabled = false;
+                        submitBtn.innerHTML = '<i class="fas fa-upload"></i> Subir Archivo';
+                        return;
+                    }
+
+                    const githubRepo = localStorage.getItem('github_repo') || 'jeick95/BD-portafolio-1';
+
+                    try {
+                        progressFill.style.width = '55%';
+                        const base64Content = await fileToBase64(file);
+                        const unidadPath = getUnidadPath(semana);
+                        const githubPath = `trabajo-semana/${unidadPath}/${safeFileName}`;
+
+                        // Verificar si el archivo ya existe
+                        const checkResponse = await fetch(
+                            `https://api.github.com/repos/${githubRepo}/contents/${githubPath}`,
+                            {
+                                headers: {
+                                    'Authorization': `Bearer ${githubToken}`,
+                                    'Accept': 'application/vnd.github.v3+json'
+                                }
+                            }
+                        );
+
+                        let sha = null;
+                        if (checkResponse.ok) {
+                            const existingFile = await checkResponse.json();
+                            sha = existingFile.sha;
                         }
-                    ]);
 
-                if (dbError) throw dbError;
+                        // Subir a GitHub
+                        const uploadResponse = await fetch(
+                            `https://api.github.com/repos/${githubRepo}/contents/${githubPath}`,
+                            {
+                                method: 'PUT',
+                                headers: {
+                                    'Authorization': `Bearer ${githubToken}`,
+                                    'Content-Type': 'application/json',
+                                    'Accept': 'application/vnd.github.v3+json'
+                                },
+                                body: JSON.stringify({
+                                    message: `Subir: ${title} (Semana ${semana})`,
+                                    content: base64Content,
+                                    branch: 'main',
+                                    ...(sha && { sha })
+                                })
+                            }
+                        );
+
+                        if (uploadResponse.ok) {
+                            const uploadData = await uploadResponse.json();
+                            githubUrl = uploadData.content.html_url;
+                            progressFill.style.width = '65%';
+                        } else {
+                            const errorData = await uploadResponse.json();
+                            console.warn('GitHub warning:', errorData.message);
+                        }
+                    } catch (githubError) {
+                        console.warn('GitHub error:', githubError);
+                    }
+                }
+
+                progressText.textContent = 'Guardando en base de datos...';
+                progressFill.style.width = '80%';
+
+                const insertData = {
+                    titulo: title,
+                    descripcion: descripcion || null,
+                    curso: curso || 'Base de Datos II',
+                    semana: semana,
+                    url: archivoUrl || null,
+                    nombre: archivoPath || null,
+                    repositorio_url: repoUrl || githubUrl || null,
+                    github_url: githubUrl || null,
+                    user_id: userId,
+                    created_at: new Date().toISOString()
+                };
+
+                console.log('Datos a insertar:', insertData);
+
+                const { data: insertResult, error: insertError } = await supabase
+                    .from('trabajos')
+                    .insert(insertData)
+                    .select()
+                    .single();
+
+                if (insertError) {
+                    console.error('Insert error:', insertError);
+                    throw new Error(`Error de base de datos: ${insertError.message}`);
+                }
+
+                progressFill.style.width = '100%';
+                progressText.textContent = '¡Completado!';
 
                 showNotification('¡Archivo subido exitosamente!', 'success');
 
+                setTimeout(() => {
+                    progress.classList.remove('active');
+                    progressFill.style.width = '0%';
+                }, 1500);
+
                 document.getElementById('uploadForm').reset();
-                document.getElementById('selectedFile').style.display = 'none';
-                loadFiles();
+                removeFile();
+                await loadFiles();
 
             } catch (error) {
-                showNotification('Error al subir archivo: ' + error.message, 'error');
+                showNotification(error.message || 'Error al subir archivo', 'error');
+                progress.classList.remove('active');
+                progressFill.style.width = '0%';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = '<i class="fas fa-upload"></i> Subir Archivo';
+            }
+        });
+
+        function fileToBase64(file) {
+            return new Promise((resolve, reject) => {
+                const reader = new FileReader();
+                reader.onload = () => resolve(reader.result.split(',')[1]);
+                reader.onerror = reject;
+                reader.readAsDataURL(file);
+            });
+        }
+
+        function getUnidadPath(semana) {
+            const unidades = {
+                '1': 'UNIDAD-1/semana-01',
+                '2': 'UNIDAD-1/semana-02',
+                '3': 'UNIDAD-1/semana-03',
+                '4': 'UNIDAD-1/semana-04',
+                '5': 'UNIDAD-2/semana-05',
+                '6': 'UNIDAD-2/semana-06',
+                '7': 'UNIDAD-2/semana-07',
+                '8': 'UNIDAD-2/semana-08',
+                '9': 'UNIDAD-3/semana-09',
+                '10': 'UNIDAD-3/semana-10',
+                '11': 'UNIDAD-3/semana-11',
+                '12': 'UNIDAD-3/semana-12',
+                '13': 'UNIDAD-4/semana-13',
+                '14': 'UNIDAD-4/semana-14',
+                '15': 'UNIDAD-4/semana-15'
+            };
+            return unidades[semana] || `semana-${semana}`;
+        }
+
+        // Obtener token de GitHub (solicita si no existe)
+        function getGitHubToken() {
+            let token = localStorage.getItem('github_token');
+
+            if (!token) {
+                token = prompt('Ingresa tu GitHub Personal Access Token:\n\nPara crear uno:\n1. Ve a GitHub > Settings > Developer settings\n2. Personal access tokens > Generate new token (classic)\n3. Selecciona scopes: repo (Full control)\n4. Copia y pega el token aquí');
+
+                if (token && token.trim()) {
+                    localStorage.setItem('github_token', token.trim());
+                    showNotification('GitHub Token guardado correctamente', 'success');
+                    updateGitHubStatus();
+                } else {
+                    showNotification('Token requerido para subir a GitHub', 'error');
+                    return null;
+                }
+            }
+
+            return token;
+        }
+
+        // Mostrar configuración de GitHub
+        function showGitHubConfig() {
+            const currentToken = localStorage.getItem('github_token');
+            const hasToken = currentToken ? true : false;
+
+            const options = hasToken ? 
+                '1. Verificar token\n2. Cambiar token\n3. Eliminar token\n\nToken actual: ✓ Configurado' :
+                '1. Configurar token\n\nNo hay token configurado';
+
+            const choice = prompt(`Configuración de GitHub:\n\n${options}\n\nIngresa el número de opción:`);
+
+            if (choice === '1') {
+                getGitHubToken();
+            } else if (choice === '2' && hasToken) {
+                resetGitHubToken();
+            } else if (choice === '3' && hasToken) {
+                resetGitHubToken();
+            } else if (choice === '1' && !hasToken) {
+                getGitHubToken();
+            }
+            updateGitHubStatus();
+        }
+
+        // Eliminar/Cambiar token de GitHub
+        function resetGitHubToken() {
+            if (confirm('¿Eliminar el token de GitHub guardado?')) {
+                localStorage.removeItem('github_token');
+                showNotification('Token eliminado. Debes configurar uno nuevo.', 'info');
+                updateGitHubStatus();
             }
         }
 
+        // Delete File
         async function deleteFile(fileId) {
-            if (!confirm('¿Estás seguro de que deseas eliminar este archivo?')) return;
-
+            if (!confirm('¿Eliminar este archivo?')) return;
             try {
-                const { error } = await supabase
-                    .from('trabajos')
-                    .delete()
-                    .eq('id', fileId);
-
+                const { error } = await supabase.from('trabajos').delete().eq('id', fileId);
                 if (error) throw error;
-
                 showNotification('Archivo eliminado', 'success');
                 loadFiles();
             } catch (error) {
-                showNotification('Error al eliminar: ' + error.message, 'error');
+                showNotification('Error: ' + error.message, 'error');
             }
         }
 
+        // Edit File
         async function editFile(fileId) {
-            const { data } = await supabase
-                .from('trabajos')
-                .select('*')
-                .eq('id', fileId)
-                .single();
-
-            if (!data) return;
-
-            const newTitle = prompt('Nuevo título:', data.titulo || data.nombre);
-            if (newTitle === null) return;
-
-            const newWeek = prompt('Nueva semana:', data.semana);
-            if (newWeek === null) return;
-
-            const newDescription = prompt('Nueva descripción:', data.descripcion || '');
-            if (newDescription === null) return;
-
             try {
-                const { error } = await supabase
-                    .from('trabajos')
-                    .update({ 
-                        titulo: newTitle, 
-                        semana: newWeek, 
-                        descripcion: newDescription 
-                    })
-                    .eq('id', fileId);
+                const { data } = await supabase.from('trabajos').select('*').eq('id', fileId).single();
+                if (!data) return;
+
+                const newTitle = prompt('Nuevo título:', data.titulo || '');
+                if (newTitle === null) return;
+                const newWeek = prompt('Nueva semana (número):', data.semana || '');
+                if (newWeek === null) return;
+                const newDesc = prompt('Nueva descripción:', data.descripcion || '');
+
+                const { error } = await supabase.from('trabajos').update({
+                    titulo: newTitle,
+                    semana: newWeek || null,
+                    descripcion: newDesc || null
+                }).eq('id', fileId);
 
                 if (error) throw error;
-
                 showNotification('Archivo actualizado', 'success');
                 loadFiles();
             } catch (error) {
-                showNotification('Error al actualizar: ' + error.message, 'error');
+                showNotification('Error: ' + error.message, 'error');
             }
         }
 
         function updateStats() {
             document.getElementById('lastUpdate').textContent = new Date().toLocaleTimeString('es-ES', { hour: '2-digit', minute: '2-digit' });
-            document.getElementById('totalViews').textContent = Math.floor(Math.random() * 1000) + 500;
         }
 
-        document.getElementById('fileInput').addEventListener('change', function(e) {
-            if (this.files.length > 0) {
-                document.getElementById('selectedFile').style.display = 'block';
-                document.getElementById('fileName').textContent = this.files[0].name;
-            }
-        });
+        function escapeHtml(str) {
+            if (!str) return '';
+            const div = document.createElement('div');
+            div.textContent = str;
+            return div.innerHTML;
+        }
 
-        document.getElementById('uploadForm').addEventListener('submit', function(e) {
-            e.preventDefault();
-            uploadFile();
-        });
+        function formatFileSize(bytes) {
+            if (!bytes) return '';
+            if (bytes < 1024) return bytes + ' B';
+            if (bytes < 1048576) return (bytes / 1024).toFixed(1) + ' KB';
+            return (bytes / 1048576).toFixed(1) + ' MB';
+        }
     </script>
 </body>
 </html>

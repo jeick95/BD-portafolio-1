@@ -32,8 +32,20 @@ async function loginUser(email, password, rememberMe) {
 
         if (rememberMe) {
             localStorage.setItem('rememberedEmail', email);
+<<<<<<< HEAD
         } else {
             localStorage.removeItem('rememberedEmail');
+=======
+<<<<<<< HEAD
+        } else {
+            localStorage.removeItem('rememberedEmail');
+=======
+            localStorage.setItem('rememberedPassword', password);
+        } else {
+            localStorage.removeItem('rememberedEmail');
+            localStorage.removeItem('rememberedPassword');
+>>>>>>> 543ba7d (Subida limpia)
+>>>>>>> e14bce1 (Proyecto limpio sin tokens)
         }
 
         showNotification('Login exitoso', 'success');
@@ -44,7 +56,17 @@ async function loginUser(email, password, rememberMe) {
             .eq('id', data.user.id)
             .single();
 
+<<<<<<< HEAD
         if (profile?.rol === 'admin' || email === 'luffyjeick95074ku@gmail.com' || email === 'aranda@gmail.com') {
+=======
+<<<<<<< HEAD
+        if (profile?.rol === 'admin' || email === 'luffyjeick95074ku@gmail.com' || email === 'aranda@gmail.com') {
+=======
+        const adminEmails = ['luffyjeick95074ku@gmail.com', 'aranda@gmail.com', 't01256d@ms.upla.edu.pe', 'jeick95@gmail.com'];
+        
+        if (profile?.rol === 'admin' || adminEmails.includes(email)) {
+>>>>>>> 543ba7d (Subida limpia)
+>>>>>>> e14bce1 (Proyecto limpio sin tokens)
             setTimeout(() => window.location.href = 'dashboard.html', 1000);
         } else {
             setTimeout(() => window.location.href = 'index.html', 1000);
@@ -114,6 +136,10 @@ async function isAdmin(userId) {
     try {
         if (!userId) return false;
 
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+>>>>>>> e14bce1 (Proyecto limpio sin tokens)
         const adminEmails = ['luffyjeick95074ku@gmail.com', 'aranda@gmail.com', 't01256d@ms.upla.edu.pe'];
 
         // Intentar obtener el perfil desde la base de datos
@@ -130,6 +156,42 @@ async function isAdmin(userId) {
         }
 
         return data && (data.rol === 'admin' || adminEmails.includes(data.email));
+<<<<<<< HEAD
+=======
+=======
+        const adminEmails = ['luffyjeick95074ku@gmail.com', 'aranda@gmail.com', 't01256d@ms.upla.edu.pe', 'jeick95@gmail.com'];
+
+        // Obtener usuario actual de Supabase Auth
+        const { data: { user } } = await supabase.auth.getUser();
+        
+        if (user && adminEmails.includes(user.email)) {
+            return true;
+        }
+
+        // Si el usuario está en sessionStorage, verificar su email
+        const sessionUser = JSON.parse(sessionStorage.getItem('user'));
+        if (sessionUser && sessionUser.email && adminEmails.includes(sessionUser.email)) {
+            return true;
+        }
+
+        // Intentar obtener el perfil desde la base de datos (si la tabla existe)
+        try {
+            const { data, error } = await supabase
+                .from('perfiles')
+                .select('rol, email')
+                .eq('id', userId)
+                .single();
+            
+            if (!error && data) {
+                return data.rol === 'admin' || adminEmails.includes(data.email);
+            }
+        } catch (e) {
+            // La tabla perfiles puede no existir, continuar con verificación por email
+        }
+
+        return false;
+>>>>>>> 543ba7d (Subida limpia)
+>>>>>>> e14bce1 (Proyecto limpio sin tokens)
     } catch (error) {
         console.error("Error verificando rol:", error.message);
         return false;
