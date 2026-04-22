@@ -478,7 +478,12 @@
 
         document.addEventListener('DOMContentLoaded', async () => {
             loadTheme();
-            checkAuth();
+            // profile.html permite acceso sin auth, pero carga perfil si existe sesión
+            try {
+                currentUser = await getCurrentUser();
+            } catch (e) {
+                currentUser = null;
+            }
             await loadProfile();
         });
 

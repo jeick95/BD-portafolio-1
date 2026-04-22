@@ -500,6 +500,10 @@
                                             <span class="tech-tag">JavaScript</span>
                                         </div>
                                         <div class="exercise-actions">
+                                            <a href="https://github.com" target="_blank" class="exercise-link primary"><i class="fab fa-github"></i> Ver en GitHub</a>
+                                        </div>
+                                        
+                                        <div class="exercise-actions">
                                             <a href="https://view.genially.com/69ddca0e8cbaa17ba85fa346" target="_blank" class="exercise-link genially"><i class="fas fa-external-link-alt"></i> Ver en Genially</a>
                                         </div>
                                     </div>
@@ -550,6 +554,9 @@
                                         </div>
                                         <div class="exercise-actions">
                                             <a href="https://github.com" target="_blank" class="exercise-link primary"><i class="fab fa-github"></i> Ver en GitHub</a>
+                                        </div>
+                                        <div class="exercise-actions">
+                                            <a href="https://view.genially.com/69e8d13377114efe8379358f" target="_blank" class="exercise-link genially"><i class="fas fa-external-link-alt"></i> Ver en Genially</a>
                                         </div>
                                     </div>
                                 </div>
@@ -1378,8 +1385,8 @@
     <script src="js/config.js"></script>
     <script src="js/auth.js"></script>
     <script>
-        // Restringir acceso: Si no hay sesión, redirigir a login
-        if (!checkAuth()) { /* La redirección ocurre dentro de checkAuth */ }
+        // proyecto.html es accesible para todos los usuarios
+        // Solo el dashboard requiere autenticación de admin
 
         AOS.init({ duration: 600, easing: 'ease-out', once: true });
 
