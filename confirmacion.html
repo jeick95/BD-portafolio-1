@@ -1,0 +1,522 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Confirmar Cuenta - UPLA</title>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700;800&display=swap">
+    <style>
+        *, *::before, *::after {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        :root {
+            --red: #dc2626;
+            --red-dark: #991b1b;
+            --green: #059669;
+            --green-light: #10b981;
+            --slate-50: #f8fafc;
+            --slate-100: #f1f5f9;
+            --slate-200: #e2e8f0;
+            --slate-300: #cbd5e1;
+            --slate-400: #94a3b8;
+            --slate-500: #64748b;
+            --slate-600: #475569;
+            --slate-700: #334155;
+            --slate-800: #1e293b;
+            --slate-900: #0f172a;
+        }
+        
+        body {
+            font-family: 'DM Sans', sans-serif;
+            background: var(--slate-900);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            position: relative;
+        }
+        
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: 
+                radial-gradient(ellipse 80% 50% at 20% 40%, rgba(220, 38, 38, 0.12) 0%, transparent 50%),
+                radial-gradient(ellipse 60% 40% at 80% 60%, rgba(245, 158, 11, 0.08) 0%, transparent 50%),
+                var(--slate-900);
+            z-index: -1;
+        }
+        
+        body::after {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: radial-gradient(circle, rgba(255,255,255,0.03) 1px, transparent 1px);
+            background-size: 30px 30px;
+            z-index: -1;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.025);
+            backdrop-filter: blur(20);
+            border: 1px solid rgba(255, 255, 255, 0.06);
+            border-radius: 24px;
+            width: 100%;
+            max-width: 420px;
+            overflow: hidden;
+            animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(30px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .card-header {
+            background: linear-gradient(180deg, rgba(220, 38, 38, 0.12) 0%, transparent 100%);
+            padding: 40px 35px 25px;
+            text-align: center;
+            position: relative;
+        }
+        
+        .card-header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 3px;
+            background: linear-gradient(90deg, var(--red), #f59e0b, var(--red));
+        }
+        
+        .logo-container {
+            margin-bottom: 20px;
+        }
+        
+        .logo {
+            width: 160px;
+            height: auto;
+        }
+        
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 8px 18px;
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.08);
+            border-radius: 50px;
+            font-size: 11px;
+            font-weight: 600;
+            color: var(--slate-300);
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+        
+        .badge i {
+            color: var(--red);
+            font-size: 10px;
+        }
+        
+        .card-body {
+            padding: 30px 35px 35px;
+            text-align: center;
+        }
+        
+        h1 {
+            font-size: 24px;
+            font-weight: 700;
+            color: white;
+            margin-bottom: 12px;
+            line-height: 1.3;
+        }
+        
+        h1 span {
+            color: var(--red);
+        }
+        
+        .description {
+            font-size: 13px;
+            color: var(--slate-400);
+            line-height: 1.7;
+            margin-bottom: 28px;
+        }
+        
+        .description strong {
+            color: var(--slate-200);
+            font-weight: 600;
+        }
+        
+        .email-display {
+            background: rgba(220, 38, 38, 0.1);
+            border: 1px solid rgba(220, 38, 38, 0.2);
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
+            font-size: 13px;
+            color: #fca5a5;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .email-display i {
+            color: var(--red);
+        }
+        
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            width: 100%;
+            padding: 15px 24px;
+            font-size: 14px;
+            font-weight: 600;
+            font-family: inherit;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            text-decoration: none;
+            transition: all 0.3s ease;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, var(--red) 0%, var(--red-dark) 100%);
+            color: white;
+            box-shadow: 0 6px 20px -6px rgba(220, 38, 38, 0.5);
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px -8px rgba(220, 38, 38, 0.6);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, var(--green-light) 0%, var(--green) 100%);
+            color: white;
+            box-shadow: 0 6px 20px -6px rgba(5, 150, 105, 0.5);
+        }
+        
+        .btn-success:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px -8px rgba(5, 150, 105, 0.6);
+        }
+        
+        .alt-link {
+            margin-top: 22px;
+            padding: 14px;
+            background: rgba(255, 255, 255, 0.025);
+            border: 1px dashed rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
+        
+        .alt-link p {
+            font-size: 10px;
+            color: var(--slate-500);
+            margin-bottom: 6px;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        
+        .alt-link a {
+            font-size: 11px;
+            color: var(--slate-400);
+            word-break: break-all;
+            text-decoration: none;
+            line-height: 1.5;
+        }
+        
+        .alt-link a:hover {
+            color: var(--red);
+        }
+        
+        .card-footer {
+            padding: 18px 35px;
+            background: rgba(255, 255, 255, 0.015);
+            border-top: 1px solid rgba(255, 255, 255, 0.04);
+            text-align: center;
+        }
+        
+        .card-footer p {
+            font-size: 11px;
+            color: var(--slate-500);
+        }
+        
+        .card-footer a {
+            color: var(--slate-400);
+            text-decoration: none;
+        }
+        
+        .card-footer a:hover {
+            text-decoration: underline;
+        }
+        
+        .state {
+            display: none;
+        }
+        
+        .state.active {
+            display: block;
+            animation: fadeIn 0.4s ease-out;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: scale(0.96); }
+            to { opacity: 1; transform: scale(1); }
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 3px solid rgba(220, 38, 38, 0.2);
+            border-top-color: var(--red);
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 25px;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .icon-success {
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(135deg, var(--green-light), var(--green));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 22px;
+            box-shadow: 0 10px 25px -12px rgba(5, 150, 105, 0.5);
+            animation: pop 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+        }
+        
+        @keyframes pop {
+            0% { transform: scale(0); }
+            70% { transform: scale(1.1); }
+            100% { transform: scale(1); }
+        }
+        
+        .icon-success i {
+            font-size: 26px;
+            color: white;
+        }
+        
+        .icon-error {
+            width: 65px;
+            height: 65px;
+            background: linear-gradient(135deg, var(--red), var(--red-dark));
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 22px;
+            box-shadow: 0 10px 25px -12px rgba(220, 38, 38, 0.5);
+        }
+        
+        .icon-error i {
+            font-size: 26px;
+            color: white;
+        }
+        
+        .error-box {
+            background: rgba(220, 38, 38, 0.08);
+            border: 1px solid rgba(220, 38, 38, 0.15);
+            border-radius: 10px;
+            padding: 14px;
+            margin-bottom: 20px;
+            font-size: 12px;
+            color: #fca5a5;
+            text-align: left;
+        }
+        
+        @media (max-width: 460px) {
+            .card { margin: 12px; }
+            .card-header { padding: 30px 25px 20px; }
+            .card-body { padding: 25px 25px 28px; }
+            .card-footer { padding: 15px 25px; }
+            h1 { font-size: 20px; }
+        }
+    </style>
+</head>
+<body>
+
+    <div class="card">
+        <div class="card-header">
+            <div class="logo-container">
+                <img src="https://upla.edu.pe/web/wp-content/uploads/2024/10/logo-8.png" alt="UPLA" class="logo">
+            </div>
+            <div class="badge">
+                <i class="fas fa-graduation-cap"></i>
+                Base de Datos II
+            </div>
+        </div>
+
+        <div class="card-body">
+            <!-- Estado: Confirmar -->
+            <div class="state active" id="state-confirm">
+                <h1>¡Bienvenido a <span>UPLA!</span></h1>
+                
+                <!-- Variables de Supabase -->
+                <div class="email-display" id="emailDisplay">
+                    <i class="fas fa-envelope"></i>
+                    <span>{{ .Email }}</span>
+                </div>
+                
+                <p class="description">
+                    Gracias por registrarte en <strong>Base de Datos II</strong>.
+                    Confirma tu correo para activar tu cuenta.
+                </p>
+                
+                <!-- URL de confirmación de Supabase -->
+                <a href="{{ .ConfirmationURL }}" id="confirmBtn" class="btn btn-primary">
+                    <i class="fas fa-check-circle"></i>
+                    Confirmar mi cuenta
+                </a>
+                
+                <div class="alt-link">
+                    <p>Si no funciona, copia este enlace:</p>
+                    <a href="{{ .ConfirmationURL }}" id="confirmLink" target="_blank">{{ .ConfirmationURL }}</a>
+                </div>
+            </div>
+
+            <!-- Estado: Cargando -->
+            <div class="state" id="state-loading">
+                <div class="spinner"></div>
+                <h1>Verificando cuenta</h1>
+                <p class="description">Por favor espera un momento...</p>
+            </div>
+
+            <!-- Estado: Éxito -->
+            <div class="state" id="state-success">
+                <div class="icon-success">
+                    <i class="fas fa-check"></i>
+                </div>
+                <h1>¡Cuenta <span>verificada!</span></h1>
+                <p class="description">Tu correo ha sido confirmado. ¡Ya puedes comenzar!</p>
+                
+                <a href="login.html" class="btn btn-success">
+                    <i class="fas fa-sign-in-alt"></i>
+                    Iniciar Sesión
+                </a>
+            </div>
+
+            <!-- Estado: Error -->
+            <div class="state" id="state-error">
+                <div class="icon-error">
+                    <i class="fas fa-times"></i>
+                </div>
+                <h1>Error de verificación</h1>
+                <p class="description">No se pudo verificar tu cuenta. Intenta nuevamente.</p>
+                
+                <div class="error-box">
+                    <i class="fas fa-exclamation-circle"></i>
+                    <span id="errorMessage">Token inválido o expirado</span>
+                </div>
+                
+                <a href="{{ .ConfirmationURL }}" class="btn btn-primary">
+                    <i class="fas fa-redo"></i>
+                    Reintentar
+                </a>
+            </div>
+        </div>
+
+        <div class="card-footer">
+            <p>© 2024 Universidad Peruana Los Andes | {{ .SiteURL }}</p>
+            <p>¿No solicitaste esto? <a href="{{ .SiteURL }}">Ignorar</a></p>
+        </div>
+    </div>
+
+    <script>
+        // Variables de Supabase inyectadas desde el servidor
+        const supabaseConfig = {
+            url: 'https://dcntccncakaaftphyrkh.supabase.co',
+            anonKey: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImRjbnRjY25jYWthYWZ0cGh5cmtoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NzYwNDQxOTQsImV4cCI6MjA5MTYyMDE5NH0.KQWERzDIFD1e0FljbgO0Xq3kW8qeFzhVxawiBUoiPlU'
+        };
+        
+        // Variables del template de Supabase
+        const params = {
+            token: '{{ .Token }}',
+            tokenHash: '{{ .TokenHash }}',
+            email: '{{ .Email }}',
+            confirmationUrl: '{{ .ConfirmationURL }}',
+            redirectTo: '{{ .RedirectTo }}',
+            siteUrl: '{{ .SiteURL }}'
+        };
+        
+        const supabase = window.supabase.createClient(supabaseConfig.url, supabaseConfig.anonKey);
+        
+        function getUrlParams() {
+            const urlParams = new URLSearchParams(window.location.search);
+            return {
+                token: urlParams.get('token') || params.token,
+                email: urlParams.get('email') || params.email,
+                type: urlParams.get('type')
+            };
+        }
+        
+        function showState(stateName) {
+            document.querySelectorAll('.state').forEach(el => el.classList.remove('active'));
+            document.getElementById('state-' + stateName).classList.add('active');
+        }
+        
+        async function confirmAccount() {
+            const { token, email, type } = getUrlParams();
+            
+            // Si las variables de Supabase están vacías, usar URL params
+            if (!token || !email || token === '' || email === '' || token === '{{ .Token }}') {
+                console.log('Usando parámetros de URL');
+                return;
+            }
+            
+            showState('loading');
+            
+            try {
+                const { data, error } = await supabase.auth.verifyOTP({
+                    token: token,
+                    email: email,
+                    type: 'signup'
+                });
+                
+                if (error) throw error;
+                
+                showState('success');
+            } catch (err) {
+                console.error('Error:', err.message);
+                document.getElementById('errorMessage').textContent = err.message;
+                showState('error');
+            }
+        }
+        
+        window.addEventListener('DOMContentLoaded', () => {
+            // Verificar si hay token en URL o en variables
+            const { token, email } = getUrlParams();
+            
+            // Si las variables de Supabase están definidas, usar verificación automática
+            if (token && token !== '' && token !== '{{ .Token }}' && email && email !== '' && email !== '{{ .Email }}') {
+                confirmAccount();
+            } else {
+                // Mostrar estado de confirmación con las variables de Supabase
+                showState('confirm');
+                
+                // Las variables {{ .ConfirmationURL }} etc ya están en el HTML
+                console.log('Esperando confirmación:', { email: params.email });
+            }
+        });
+    </script>
+</body>
+</html>

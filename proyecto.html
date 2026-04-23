@@ -297,6 +297,8 @@
         .exercise-link.secondary:hover { background: rgba(99,102,241,0.2); }
         .exercise-link.success { background: rgba(16,185,129,0.1); color: var(--success); border: 1px solid rgba(16,185,129,0.2); }
         .exercise-link.success:hover { background: rgba(16,185,129,0.2); }
+        .exercise-link.warning { background: rgba(245,158,11,0.1); color: var(--warning); border: 1px solid rgba(245,158,11,0.2); }
+        .exercise-link.warning:hover { background: rgba(245,158,11,0.2); }
         .exercise-link.figma { background: rgba(243,83,164,0.1); color: var(--secondary); border: 1px solid rgba(243,83,164,0.2); }
         .exercise-link.figma:hover { background: rgba(243,83,164,0.2); }
         .exercise-link.genially { background: rgba(245,158,11,0.1); color: var(--warning); border: 1px solid rgba(245,158,11,0.2); }
@@ -361,12 +363,51 @@
         .uploaded-file-actions {
             display: flex;
             gap: 0.5rem;
+            flex-wrap: wrap;
+        }
+        .file-preview {
+            margin-top: 0.5rem;
+        }
+        .file-preview img {
+            max-height: 200px;
+            object-fit: contain;
+            border-radius: 8px;
+        }
+        .file-preview iframe {
+            border-radius: 8px;
+            border: none;
         }
         .no-files-msg {
             color: var(--text-secondary);
             font-size: 0.85rem;
             text-align: center;
             padding: 1rem;
+        }
+        
+        /* Estilos para botones de acción */
+        .exercise-link.success {
+            background: rgba(16, 185, 129, 0.1);
+            color: var(--success);
+            border: 1px solid rgba(16, 185, 129, 0.2);
+        }
+        .exercise-link.success:hover {
+            background: rgba(16, 185, 129, 0.2);
+        }
+        .exercise-link.primary {
+            background: rgba(99, 102, 241, 0.1);
+            color: var(--primary);
+            border: 1px solid rgba(99, 102, 241, 0.2);
+        }
+        .exercise-link.primary:hover {
+            background: rgba(99, 102, 241, 0.2);
+        }
+        .exercise-link.secondary {
+            background: rgba(6, 182, 212, 0.1);
+            color: var(--accent);
+            border: 1px solid rgba(6, 182, 212, 0.2);
+        }
+        .exercise-link.secondary:hover {
+            background: rgba(6, 182, 212, 0.2);
         }
 
         /* FOOTER */
@@ -395,7 +436,7 @@
     <!-- NAVBAR -->
     <nav class="navbar">
         <a href="index.html" class="navbar-brand">
-            <div class="logo-icon"><i class="fas fa-database"></i></div>
+            <img class="preload-me" src="https://upla.edu.pe/web/wp-content/uploads/2024/10/logo-8.png" srcset="https://upla.edu.pe/web/wp-content/uploads/2024/10/logo-8.png 401w" width="200" height="69" sizes="200.5px" alt="UPLA | Universidad Peruana Los Andes">
             <span>Base de Datos II</span>
         </a>
         <div class="navbar-menu" id="navbarMenu">
@@ -499,13 +540,15 @@
                                             <span class="tech-tag">CSS</span>
                                             <span class="tech-tag">JavaScript</span>
                                         </div>
-                                        <div class="exercise-actions">
+                                        <div class="exercise-actions" style="margin-top: 0.5rem;">
                                             <a href="https://github.com" target="_blank" class="exercise-link primary"><i class="fab fa-github"></i> Ver en GitHub</a>
                                         </div>
                                         
-                                        <div class="exercise-actions">
-                                            <a href="https://view.genially.com/69ddca0e8cbaa17ba85fa346" target="_blank" class="exercise-link genially"><i class="fas fa-external-link-alt"></i> Ver en Genially</a>
+                                        <div class="exercise-actions" style="margin-top: 0.5rem; display: flex; gap: 0.5rem;">
+                                            <a href="https://view.genially.com/69ddca0e8cbaa17ba85fa346" target="_blank" class="exercise-link genially"><i class="fas fa-external-link-alt"></i> Ver Genially</a>
+                                            <button onclick="toggleGeniallyEmbed('genially-s1')" class="exercise-link genially"><i class="fas fa-play"></i> Ver Presentación</button>
                                         </div>
+                                        <iframe id="genially-s1" src="" style="display:none; width:100%; height:400px; border:none; border-radius:12px; margin-top:1rem;" allowfullscreen></iframe>
                                     </div>
                                 </div>
                                 
@@ -1472,30 +1515,84 @@
                         
                         if (container) {
                             const fileDate = new Date(file.created_at).toLocaleDateString('es-ES');
+                            const ext = getFileExtension(file.nombre).toLowerCase();
+                            const fileUrl = file.url || '';
+                            const fileName = file.nombre || '';
+                            
+                            // Determinar tipo de vista previa
+                            let previewHtml = '';
+                            const isImage = ['jpg', 'jpeg', 'png', 'gif', 'webp', 'svg'].includes(ext);
+                            const isPdf = ext === 'pdf';
+                            const isVideo = ['mp4', 'webm', 'ogg'].includes(ext);
+                            const isAudio = ['mp3', 'wav', 'ogg'].includes(ext);
+                            const isDoc = ['doc', 'docx', 'xls', 'xlsx', 'ppt', 'pptx'].includes(ext);
+                            
+
+                            // Vista previa integrada
+                            if (isImage && fileUrl) {
+                                previewHtml = `
+                                    <div id="preview-${file.id}" class="file-preview" style="margin-top: 0.5rem; max-height: 400px; overflow: hidden; border-radius: 8px; background: var(--bg-secondary); display: none;">
+                                        <img src="${escapeHtml(fileUrl)}" alt="Preview" style="width: 100%; height: auto; display: block;">
+                                    </div>
+                                `;
+                            } else if (isPdf && fileUrl) {
+                                previewHtml = `
+                                    <div id="preview-${file.id}" class="file-preview" style="margin-top: 0.5rem; border-radius: 8px; overflow: hidden; display: none;">
+                                        <iframe src="${escapeHtml(fileUrl)}" style="width: 100%; height: 500px; border: none;"></iframe>
+                                    </div>
+                                `;
+                            } else if (isVideo && fileUrl) {
+                                previewHtml = `
+                                    <div id="preview-${file.id}" class="file-preview" style="margin-top: 0.5rem; border-radius: 8px; overflow: hidden; display: none;">
+                                        <video controls style="width: 100%; max-height: 400px;">
+                                            <source src="${escapeHtml(fileUrl)}" type="video/${ext}">
+                                            Tu navegador no soporta video.
+                                        </video>
+                                    </div>
+                                `;
+                            } else if (isAudio && fileUrl) {
+                                previewHtml = `
+                                    <div id="preview-${file.id}" class="file-preview" style="margin-top: 0.5rem; padding: 0.75rem; background: var(--bg-secondary); border-radius: 8px; display: none;">
+                                        <audio controls style="width: 100%;">
+                                            <source src="${escapeHtml(fileUrl)}" type="audio/${ext}">
+                                            Tu navegador no soporta audio.
+                                        </audio>
+                                    </div>
+                                `;
+                            }
+                            
                             const fileItem = document.createElement('div');
                             fileItem.className = 'uploaded-file-item';
                             
-                            let actionsHtml = '<div class="uploaded-file-actions">';
-                            if (file.url) {
-                                actionsHtml += `<a href="${escapeHtml(file.url)}" target="_blank" class="exercise-link secondary" title="Ver archivo"><i class="fas fa-external-link-alt"></i> Ver</a>`;
+                            let actionsHtml = '<div class="uploaded-file-actions" style="display: flex; flex-wrap: wrap; gap: 0.5rem;">';
+                            
+                            // Botón de descarga
+                            if (fileUrl) {
+                                actionsHtml += `<a href="${escapeHtml(fileUrl)}" download="${escapeHtml(fileName)}" class="exercise-link success" title="Descargar"><i class="fas fa-download"></i> Descargar</a>`;
+                                // Ver archivo en nueva pestaña
+                                actionsHtml += `<a href="${escapeHtml(fileUrl)}" target="_blank" class="exercise-link secondary" title="Ver"><i class="fas fa-eye"></i> Ver</a>`;
+                                // Botón toggle vista previa
+                                actionsHtml += `<button onclick="toggleFilePreview('preview-${file.id}')" class="exercise-link warning" title="Vista previa"><i class="fas fa-images"></i> Preview</button>`;
                             }
+                            // GitHub
                             if (file.github_url) {
-                                actionsHtml += `<a href="${escapeHtml(file.github_url)}" target="_blank" class="exercise-link primary" title="Ver en GitHub"><i class="fab fa-github"></i> GitHub</a>`;
+                                actionsHtml += `<a href="${escapeHtml(file.github_url)}" target="_blank" class="exercise-link primary" title="GitHub"><i class="fab fa-github"></i> GitHub</a>`;
                             } else if (file.repositorio_url) {
-                                actionsHtml += `<a href="${escapeHtml(file.repositorio_url)}" target="_blank" class="exercise-link primary" title="Ver en GitHub"><i class="fab fa-github"></i> GitHub</a>`;
+                                actionsHtml += `<a href="${escapeHtml(file.repositorio_url)}" target="_blank" class="exercise-link primary" title="GitHub"><i class="fab fa-github"></i> GitHub</a>`;
                             }
                             actionsHtml += '</div>';
                             
                             fileItem.innerHTML = `
                                 <div class="uploaded-file-icon">
-                                    <i class="fas fa-file-code"></i>
+                                    <i class="fas fa-${getFileIcon(ext)}"></i>
                                 </div>
                                 <div class="uploaded-file-info">
                                     <div class="uploaded-file-name">${escapeHtml(file.titulo || 'Sin título')}</div>
                                     <div class="uploaded-file-meta">
                                         <span><i class="fas fa-calendar"></i> ${fileDate}</span>
-                                        ${file.nombre ? `<span class="tech-tag" style="padding: 0.1rem 0.4rem; font-size: 0.65rem;">${getFileExtension(file.nombre)}</span>` : ''}
+                                        ${fileName ? `<span class="tech-tag" style="padding: 0.1rem 0.4rem; font-size: 0.65rem;">${ext.toUpperCase()}</span>` : ''}
                                     </div>
+                                    ${previewHtml}
                                 </div>
                                 ${actionsHtml}
                             `;
@@ -1533,6 +1630,68 @@
             if (!filename) return '';
             const ext = filename.split('.').pop();
             return ext ? ext.toUpperCase() : '';
+        }
+
+        function getFileIcon(ext) {
+            const extLower = ext.toLowerCase();
+            const icons = {
+                'pdf': 'file-pdf',
+                'doc': 'file-word',
+                'docx': 'file-word',
+                'xls': 'file-excel',
+                'xlsx': 'file-excel',
+                'ppt': 'file-powerpoint',
+                'pptx': 'file-powerpoint',
+                'jpg': 'file-image',
+                'jpeg': 'file-image',
+                'png': 'file-image',
+                'gif': 'file-image',
+                'svg': 'file-image',
+                'webp': 'file-image',
+                'mp4': 'file-video',
+                'webm': 'file-video',
+                'mp3': 'file-audio',
+                'wav': 'file-audio',
+                'zip': 'file-archive',
+                'rar': 'file-archive',
+                'txt': 'file-alt',
+                'js': 'file-code',
+                'html': 'code',
+                'css': 'code',
+                'java': 'coffee'
+            };
+            return icons[extLower] || 'file';
+        }
+
+        // Mostrar/ocultar presentación de Genially
+        function toggleGeniallyEmbed(iframeId) {
+            const iframe = document.getElementById(iframeId);
+            if (iframe.style.display === 'none' || iframe.style.display === '') {
+                // Mapear IDs a URLs de Genially
+                const geniallyUrls = {
+                    'genially-s1': 'https://view.genially.com/69ddca0e8cbaa17ba85fa346',
+                    'genially-s2': 'https://view.genially.com/69e8d13377114efe8379358f'
+                };
+                if (geniallyUrls[iframeId]) {
+                    iframe.src = geniallyUrls[iframeId];
+                }
+                iframe.style.display = 'block';
+            } else {
+                iframe.style.display = 'none';
+                iframe.src = '';
+            }
+        }
+
+        // Mostrar/ocultar vista previa de archivos
+        function toggleFilePreview(previewId) {
+            const preview = document.getElementById(previewId);
+            if (preview) {
+                if (preview.style.display === 'none' || preview.style.display === '') {
+                    preview.style.display = 'block';
+                } else {
+                    preview.style.display = 'none';
+                }
+            }
         }
 
         // Cargar archivos al iniciar
