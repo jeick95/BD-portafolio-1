@@ -2,10 +2,10 @@ async function registerUser(email, password, nombre, carrera) {
     try {
         const { data, error } = await supabase.auth.signUp({
             email: email,
-            password: password, // <-- ¡Aquí faltaba una coma!
+            password: password,
             options: {
                 data: {
-                    nombre: nombre // Pasamos 'nombre' para que el trigger SQL lo lea de raw_user_meta_data
+                    nombre: nombre
                 }
             }
         });
@@ -38,6 +38,8 @@ async function loginUser(email, password, rememberMe) {
             localStorage.removeItem('rememberedPassword');
         }
 
+        sessionStorage.setItem('user', JSON.stringify(data.user));
+
         showNotification('Login exitoso', 'success');
         
         const { data: profile } = await supabase
@@ -66,7 +68,7 @@ async function logoutUser() {
         const { error } = await supabase.auth.signOut();
         if (error) throw error;
         
-        sessionStorage.clear();
+        sessionStorage.removeItem('user');
         showNotification('Sesión cerrada', 'success');
         setTimeout(() => window.location.href = 'login.html', 1000);
     } catch (error) {
@@ -120,20 +122,17 @@ async function isAdmin(userId) {
 
         const adminEmails = ['luffyjeick95074ku@gmail.com', 'aranda@gmail.com', 't01256d@ms.upla.edu.pe', 'jeick95@gmail.com'];
 
-        // Obtener usuario actual de Supabase Auth
         const { data: { user } } = await supabase.auth.getUser();
         
         if (user && adminEmails.includes(user.email)) {
             return true;
         }
 
-        // Si el usuario está en sessionStorage, verificar su email
         const sessionUser = JSON.parse(sessionStorage.getItem('user'));
         if (sessionUser && sessionUser.email && adminEmails.includes(sessionUser.email)) {
             return true;
         }
 
-        // Intentar obtener el perfil desde la base de datos (si la tabla existe)
         try {
             const { data, error } = await supabase
                 .from('perfiles')
@@ -144,9 +143,7 @@ async function isAdmin(userId) {
             if (!error && data) {
                 return data.rol === 'admin' || adminEmails.includes(data.email);
             }
-        } catch (e) {
-            // La tabla perfiles puede no existir, continuar con verificación por email
-        }
+        } catch (e) {}
 
         return false;
     } catch (error) {
@@ -172,13 +169,15 @@ function fillRememberedEmail() {
     }
 }
 
-supabase.auth.onAuthStateChange((event, session) => {
-    if (event === 'SIGNED_IN') {
-        sessionStorage.setItem('user', JSON.stringify(session.user));
-    } else if (event === 'SIGNED_OUT') {
-        sessionStorage.removeItem('user');
-    }
-});
+function initAuthStateListener() {
+    supabase.auth.onAuthStateChange((event, session) => {
+        if (event === 'SIGNED_IN') {
+            sessionStorage.setItem('user', JSON.stringify(session.user));
+        } else if (event === 'SIGNED_OUT') {
+            sessionStorage.removeItem('user');
+        }
+    });
+}
 
 window.registerUser = registerUser;
 window.loginUser = loginUser;
@@ -190,3 +189,4 @@ window.isAdmin = isAdmin;
 window.checkAuth = checkAuth;
 window.fillRememberedEmail = fillRememberedEmail;
 window.showNotification = showNotification;
+window.initAuthStateListener = initAuthStateListener;

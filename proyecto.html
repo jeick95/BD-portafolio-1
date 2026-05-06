@@ -391,6 +391,89 @@
             .exercises-grid { grid-template-columns: 1fr; }
             .section { padding: 4rem 0 2rem; }
         }
+
+        /* ====== CHATBOT ====== */
+        .cb-btn{position:fixed;bottom:1.5rem;right:1.5rem;width:58px;height:58px;border-radius:50%;background:linear-gradient(135deg,#6366f1,#06b6d4);border:none;color:#fff;font-size:1.4rem;cursor:pointer;z-index:9999;display:flex;align-items:center;justify-content:center;box-shadow:0 8px 28px rgba(99,102,241,.45);transition:.3s}
+        .cb-btn:hover{transform:scale(1.1) rotate(6deg);box-shadow:0 12px 36px rgba(99,102,241,.55)}
+        .cb-btn .cb-dot{position:absolute;top:2px;right:2px;width:14px;height:14px;background:#ef4444;border-radius:50%;border:2px solid var(--bg-primary);animation:cbDot 2s infinite}
+        .cb-btn.active .cb-dot{display:none}
+        @keyframes cbDot{0%,100%{transform:scale(1)}50%{transform:scale(1.3)}}
+
+        .cb-panel{position:fixed;bottom:6.5rem;right:1.5rem;width:390px;max-height:580px;background:var(--bg-card);border:1px solid var(--border);border-radius:16px;z-index:9999;display:flex;flex-direction:column;overflow:hidden;box-shadow:0 20px 50px rgba(0,0,0,.5);opacity:0;transform:translateY(20px) scale(.94);pointer-events:none;transition:.35s cubic-bezier(.4,0,.2,1)}
+        .cb-panel.show{opacity:1;transform:none;pointer-events:all}
+
+        .cb-top{background:linear-gradient(135deg,#6366f1,#06b6d4);padding:.9rem 1.1rem;display:flex;align-items:center;justify-content:space-between}
+        .cb-top-info{display:flex;align-items:center;gap:.65rem}
+        .cb-top-icon{width:38px;height:38px;border-radius:10px;background:rgba(255,255,255,.18);display:flex;align-items:center;justify-content:center;font-size:1.1rem;color:#fff}
+        .cb-top h5{color:#fff;font-size:.9rem;font-weight:700;margin:0}
+        .cb-top small{color:rgba(255,255,255,.8);font-size:.7rem;display:flex;align-items:center;gap:.3rem}
+        .cb-top small::before{content:'';width:7px;height:7px;background:#10b981;border-radius:50%;display:inline-block}
+        .cb-x{background:rgba(255,255,255,.15);border:none;color:#fff;width:30px;height:30px;border-radius:8px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.75rem;transition:.2s}
+        .cb-x:hover{background:rgba(255,255,255,.25);transform:rotate(90deg)}
+
+        .cb-bar{display:flex;gap:.2rem;padding:.4rem .7rem;background:var(--bg-secondary);border-bottom:1px solid var(--border);overflow-x:auto}
+        .cb-bar::-webkit-scrollbar{height:0}
+        .cb-b{background:var(--bg-card);border:1px solid var(--border);color:var(--text-secondary);padding:.28rem .55rem;border-radius:6px;font-size:.67rem;cursor:pointer;transition:.2s;white-space:nowrap}
+        .cb-b:hover{background:var(--primary);color:#fff;border-color:var(--primary)}
+
+        .cb-body{flex:1;padding:.85rem;overflow-y:auto;display:flex;flex-direction:column;gap:.65rem;max-height:340px;background:var(--bg-secondary)}
+        .cb-body::-webkit-scrollbar{width:5px}
+        .cb-body::-webkit-scrollbar-thumb{background:var(--border);border-radius:3px}
+
+        .cb-m{display:flex;gap:.4rem;max-width:86%;animation:cbIn .3s ease}
+        .cb-m.b{align-self:flex-start}
+        .cb-m.u{align-self:flex-end;flex-direction:row-reverse}
+        @keyframes cbIn{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
+
+        .cb-m .cb-a{width:28px;height:28px;border-radius:50%;flex-shrink:0;display:flex;align-items:center;justify-content:center;font-size:.7rem}
+        .cb-m.b .cb-a{background:linear-gradient(135deg,#6366f1,#06b6d4);color:#fff}
+        .cb-m.u .cb-a{background:var(--bg-card-hover);color:var(--text-secondary)}
+
+        .cb-t{padding:.7rem .85rem;border-radius:12px;font-size:.82rem;line-height:1.5}
+        .cb-m.b .cb-t{background:var(--bg-card);color:var(--text-primary);border-bottom-left-radius:4px;border:1px solid var(--border)}
+        .cb-m.u .cb-t{background:linear-gradient(135deg,#6366f1,#4f46e5);color:#fff;border-bottom-right-radius:4px}
+        .cb-t strong{font-weight:600}
+        .cb-t a{color:var(--primary-light);text-decoration:none}
+        .cb-t a:hover{text-decoration:underline}
+        .cb-t code{background:rgba(99,102,241,.12);padding:.1rem .3rem;border-radius:3px;font-size:.76rem;font-family:'Courier New',monospace}
+        .cb-t ul,.cb-t ol{margin:.35rem 0;padding-left:1.1rem}
+        .cb-t li{margin-bottom:.15rem}
+
+        .cb-dots{display:flex;gap:4px;padding:.7rem .9rem;background:var(--bg-card);border-radius:12px;border:1px solid var(--border);border-bottom-left-radius:4px;align-self:flex-start}
+        .cb-dots span{width:7px;height:7px;border-radius:50%;background:var(--primary);animation:cbTy 1.3s infinite}
+        .cb-dots span:nth-child(2){animation-delay:.2s}
+        .cb-dots span:nth-child(3){animation-delay:.4s}
+        @keyframes cbTy{0%,60%,100%{transform:translateY(0);opacity:.4}30%{transform:translateY(-6px);opacity:1}}
+
+        .cb-qr{display:flex;flex-wrap:wrap;gap:.3rem;margin-top:.45rem}
+        .cb-q{background:rgba(99,102,241,.08);border:1px solid rgba(99,102,241,.22);color:var(--primary-light);padding:.32rem .65rem;border-radius:16px;font-size:.7rem;cursor:pointer;transition:.2s}
+        .cb-q:hover{background:var(--primary);color:#fff}
+
+        .cb-inp{border-top:1px solid var(--border);background:var(--bg-secondary);padding:.65rem .8rem;display:flex;gap:.4rem}
+        .cb-inp input{flex:1;background:var(--bg-card);border:1px solid var(--border);border-radius:10px;padding:.6rem .8rem;color:var(--text-primary);font-size:.82rem;outline:none;transition:.2s}
+        .cb-inp input:focus{border-color:var(--primary);box-shadow:0 0 0 2px rgba(99,102,241,.1)}
+        .cb-inp input::placeholder{color:var(--text-secondary)}
+        .cb-go{background:linear-gradient(135deg,#6366f1,#06b6d4);border:none;color:#fff;width:38px;height:38px;border-radius:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:.9rem;transition:.2s;box-shadow:0 3px 10px rgba(99,102,241,.3)}
+        .cb-go:hover{transform:scale(1.06)}
+        .cb-go:disabled{opacity:.5;cursor:not-allowed;transform:none}
+
+        .cb-foot{padding:.4rem;text-align:center;font-size:.6rem;color:var(--text-secondary);border-top:1px solid var(--border);background:var(--bg-secondary)}
+        .cb-foot .cb-st{display:flex;align-items:center;justify-content:center;gap:.25rem;margin-top:.15rem}
+        .cb-st i{width:6px;height:6px;border-radius:50%}
+        .cb-st i.on{background:#10b981}
+        .cb-st i.off{background:#ef4444}
+
+        @media(max-width:768px){
+            .cb-panel{width:calc(100% - 1.5rem);right:.75rem;bottom:5.5rem;max-height:70vh}
+            .cb-btn{width:52px;height:52px;font-size:1.2rem}
+        }
+
+        /* FOOTER */
+        .footer{background:var(--bg-secondary);padding:3rem 2rem 2rem;text-align:center;border-top:1px solid var(--border)}
+        .social-links{display:flex;justify-content:center;gap:1rem;margin-bottom:1.5rem}
+        .social-link{width:44px;height:44px;border-radius:12px;background:var(--bg-card);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--text-secondary);text-decoration:none;transition:all .2s ease}
+        .social-link:hover{background:var(--primary);color:#fff;border-color:var(--primary);transform:translateY(-3px)}
+        .footer p{color:var(--text-secondary);font-size:.9rem;margin-bottom:.5rem}
     </style>
 </head>
 <body>
@@ -1420,9 +1503,66 @@
             <a href="https://www.linkedin.com/in/jeick-aranda-navarro-4150ba359/" class="social-link" target="_blank"><i class="fab fa-linkedin"></i></a>
             <a href="https://www.instagram.com/" class="social-link" target="_blank"><i class="fab fa-instagram"></i></a>
         </div>
-        <p>© 2025 Base de Datos II. Universidad Peruana Los Andes.</p>
+        <p>© 2026 Base de Datos II. Universidad Peruana Los Andes.</p>
         <p>Estudiante: Aranda Navarro Jeick</p>
     </footer>
+
+    <!-- CHATBOT -->
+    <button class="cb-btn" id="cbBtn" onclick="cbToggle()" aria-label="Chat">
+        <i class="fas fa-comments"></i>
+        <span class="cb-dot"></span>
+    </button>
+
+    <div class="cb-panel" id="cbPanel">
+        <div class="cb-top">
+            <div class="cb-top-info">
+                <div class="cb-top-icon"><i class="fas fa-robot"></i></div>
+                <div>
+                    <h5>Asistente — Jeick</h5>
+                    <small>En línea</small>
+                </div>
+            </div>
+            <button class="cb-x" onclick="cbToggle()"><i class="fas fa-times"></i></button>
+        </div>
+        <div class="cb-bar">
+            <button class="cb-b" onclick="cbSend('¿Quién es Jeick?')">👤 Sobre mí</button>
+            <button class="cb-b" onclick="cbSend('¿Qué proyectos tiene?')">💻 Proyectos</button>
+            <button class="cb-b" onclick="cbSend('¿Qué tecnologías usa?')">🛠️ Skills</button>
+            <button class="cb-b" onclick="cbSend('¿Cómo contactarlo?')">📧 Contacto</button>
+            <button class="cb-b" onclick="cbSend('Calcula 25*4')">🔢 Calcular</button>
+            <button class="cb-b" onclick="cbSend('Dime un dato curioso')">💡 Dato</button>
+            <button class="cb-b" onclick="cbSend('Cuéntame un chiste')">😂 Chiste</button>
+        </div>
+        <div class="cb-body" id="cbBody">
+            <div class="cb-m b">
+                <div class="cb-a"><i class="fas fa-robot"></i></div>
+                <div>
+                    <div class="cb-t">
+                        ¡Hola! 👋 Soy el asistente virtual de <strong>Aranda Navarro Jeick</strong>. Pregúntame sobre:<br><br>
+                        📚 Info del portafolio y curso<br>
+                        👤 Sobre Jeick — experiencia, skills<br>
+                        💻 Proyectos y tecnologías<br>
+                        🔢 Cálculos y conversiones<br>
+                        😂 Chistes y datos curiosos<br><br>
+                        ¡Escribe o usa los botones de arriba!
+                    </div>
+                    <div class="cb-qr">
+                        <button class="cb-q" onclick="cbSend('¿Quién es Jeick?')">👤 Sobre Jeick</button>
+                        <button class="cb-q" onclick="cbSend('¿Qué tecnologías domina?')">🛠️ Skills</button>
+                        <button class="cb-q" onclick="cbSend('Ayuda')">❓ Ayuda</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="cb-inp">
+            <input type="text" id="cbInput" placeholder="Escribe tu mensaje..." onkeypress="cbKey(event)" autocomplete="off">
+            <button class="cb-go" id="cbGo" onclick="cbSendMsg()"><i class="fas fa-paper-plane"></i></button>
+        </div>
+        <div class="cb-foot">
+            Asistente IA • Portafolio BD II — UPLA
+            <div class="cb-st"><i class="on"></i> Modo inteligente activo</div>
+        </div>
+    </div>
 
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/aos/2.3.1/aos.js"></script>
@@ -1659,6 +1799,235 @@
                     preview.style.display = 'none';
                 }
             }
+        }
+
+        /* ====== CHATBOT ENGINE ====== */
+        let _cbOpen = false;
+
+        function cbToggle(){
+            const p=document.getElementById('cbPanel'),b=document.getElementById('cbBtn');
+            _cbOpen=!_cbOpen;
+            _cbOpen?(p.classList.add('show'),b.classList.add('active'),setTimeout(()=>document.getElementById('cbInput').focus(),300)):(p.classList.remove('show'),b.classList.remove('active'));
+        }
+
+        function cbKey(e){if(e.key==='Enter')cbSendMsg()}
+
+        function cbSend(msg){document.getElementById('cbInput').value=msg;cbSendMsg()}
+
+        function cbSendMsg(){
+            const inp=document.getElementById('cbInput'),msg=inp.value.trim();
+            if(!msg)return;
+            _cbAdd(msg,'u');
+            inp.value='';
+            _cbTyping();
+            setTimeout(()=>{_cbRmTyping();const r=_cbAI(msg);_cbAdd(r.msg,'b',r.r)},500+Math.random()*600);
+        }
+
+        function _cbAdd(txt,type,qr){
+            const c=document.getElementById('cbBody'),d=document.createElement('div');
+            d.className=`cb-m ${type}`;
+            const av=type==='b'?'fa-robot':'fa-user';
+            let h=`<div class="cb-a"><i class="fas ${av}"></i></div><div><div class="cb-t">${txt}</div>`;
+            if(qr&&qr.length){h+='<div class="cb-qr">';qr.forEach(q=>{h+=`<button class="cb-q" onclick="cbSend('${q.replace(/'/g,"\\'")}')">${q}</button>`});h+='</div>'}
+            h+='</div>';d.innerHTML=h;c.appendChild(d);c.scrollTop=c.scrollHeight;
+        }
+
+        function _cbTyping(){
+            const c=document.getElementById('cbBody'),d=document.createElement('div');
+            d.className='cb-dots';d.id='cbTy';d.innerHTML='<span></span><span></span><span></span>';
+            c.appendChild(d);c.scrollTop=c.scrollHeight;
+        }
+        function _cbRmTyping(){const t=document.getElementById('cbTy');if(t)t.remove()}
+
+        /* ====== INTELIGENCIA ====== */
+        function _cbAI(m){
+            const l=m.toLowerCase().trim();
+
+            /* -- Sobre Jeick (info de about.html) -- */
+            if(/jeick|quien es el (creador|autor|due[nñ]o)|sobre (mi|ti|jeick|el|este chico)|perfil|bio/i.test(l))
+                return{msg:`👤 <strong>Aranda Navarro Jeick</strong><br><br>Estudiante de <strong>Ingeniería de Sistemas y Computación</strong> en la Universidad Peruana Los Andes.<br><br>🎓 Desarrollador de Aplicaciones con experiencia en Java, Maven, tecnologías web modernas y bases de datos.<br><br>📍 Ubicado en <strong>Huancayo, Junín, Perú</strong>.<br><br>💡 Apasionado por construir aplicaciones robustas con Java + MySQL y interfaces modernas con HTML, CSS y JavaScript.`,r:['🛠️ Skills','💻 Proyectos','📧 Contacto']};
+
+            if(/skill|habilidad|tecnolog[ií]a|lenguaj|domina|sabe programar|stack|que sabe/i.test(l))
+                return{msg:`🛠️ <strong>Tecnologías que domina Jeick:</strong><br><br>💻 <strong>Programación:</strong><br>• Java — Avanzado (90%)<br>• JavaScript — Intermedio (70%)<br>• HTML/CSS — Avanzado (85%)<br><br>🗄️ <strong>Bases de Datos:</strong><br>• MySQL — Intermedio (75%)<br>• JDBC — Intermedio (80%)<br>• SQL — Intermedio (70%)<br><br>🎨 <strong>Frontend & Design:</strong><br>• JSP/Servlet — Intermedio<br>• Figma — Intermedio<br>• UI/UX Design — Intermedio<br><br>📦 <strong>Herramientas:</strong> Git, GitHub, Maven, Supabase`,r:['👤 Sobre Jeick','💻 Proyectos','📚 Curso']};
+
+            if(/proyect|trabaj|ha hecho|ha creado|portfolio|portafolio|que ha/i.test(l))
+                return{msg:`💻 <strong>Proyectos de Jeick:</strong><br><br>🏆 <strong>Sistema de Gestión de Grados y Títulos (2026)</strong><br>Sistema web completo con 3 roles (Admin, Docente, Alumno), CRUD, evaluaciones, reportes y base de datos relacional con Java, JSP y MySQL.<br><br>📚 <strong>Portafolio Web — BD II</strong><br>Este portafolio con 16 semanas, 4 unidades, integración con Supabase y GitHub.<br><br>🔧 <strong>Desarrollo Backend con Java</strong><br>Aplicaciones con POO, patrones de diseño, Maven, Swing y JSP.`,r:['👤 Sobre Jeick','🛠️ Skills','📧 Contacto']};
+
+            if(/contact|contactar|correo|email|mail|linkedin|github|instagram|redes|hablar|comunicar/i.test(l))
+                return{msg:`📧 <strong>Contacta a Jeick:</strong><br><br>🐙 <strong>GitHub:</strong> <a href="https://github.com/jeick95/" target="_blank">@jeick95</a><br>💼 <strong>LinkedIn:</strong> <a href="https://www.linkedin.com/in/jeick-aranda-navarro-4150ba359/" target="_blank">Aranda Navarro Jeick</a><br>📸 <strong>Instagram:</strong> <a href="https://www.instagram.com/" target="_blank">@instagram</a><br>📍 <strong>Ubicación:</strong> Huancayo, Junín, Perú<br><br>¡Siempre abierto a oportunidades y colaboraciones!`,r:['👤 Sobre Jeick','💻 Proyectos','🛠️ Skills']};
+
+            if(/experiencia|trayectoria|background|formaci[oó]n|estudi[oó]|universidad/i.test(l))
+                return{msg:`🎓 <strong>Formación y Experiencia:</strong><br><br>📚 <strong>Ingeniería de Sistemas</strong><br>Universidad Peruana Los Andes (2024 - Presente)<br><br>💻 <strong>2026:</strong> Desarrollo Backend con Java — POO, patrones de diseño, Maven, Swing, JSP, integración con MySQL.<br><br>🎨 <strong>2024-2026:</strong> Maquetación Web y UI/UX — HTML semántico, formularios, tablas, Figma, sistemas de diseño.<br><br>🗄️ <strong>2024-2026:</strong> Bases de Datos — MySQL, SQL, JDBC.`,r:['👤 Sobre Jeick','💻 Proyectos','🛠️ Skills']};
+
+            /* -- Info del Curso -- */
+            if(/curso|contenid|materia|programa|unidad |semana |bd ?2|base de datos ii/i.test(l)){
+                if(/unidad/i.test(l))return{msg:`📚 <strong>Las 4 Unidades de BD II:</strong><br><br>📌 <strong>U1:</strong> Arquitecturas de BD (S01-S04)<br>📌 <strong>U2:</strong> SQL Avanzado (S05-S08)<br>📌 <strong>U3:</strong> Programación de BD (S09-S12)<br>📌 <strong>U4:</strong> Proyecto Final (S13-S16)<br><br>Haz clic en cada unidad para ver las semanas.`,r:['💻 Proyectos','🛠️ Skills','👤 Sobre Jeick']};
+                return{msg:`📚 <strong>Base de Datos II</strong> — UPLA<br><br>16 semanas en 4 unidades:<br>• U1: Arquitecturas de BD (S01-S04)<br>• U2: SQL Avanzado (S05-S08)<br>• U3: Programación de BD (S09-S12)<br>• U4: Proyecto Final (S13-S16)<br><br>Profesor: <a href="mailto:t01256d@ms.upla.edu.pe" style="color:var(--primary-light)">t01256d@ms.upla.edu.pe</a>`,r:['💻 Proyectos','👤 Sobre Jeick','📧 Contacto']};
+            }
+
+            if(/calific|nota|puntaje|examen|evaluaci/i.test(l))
+                return{msg:`📊 <strong>Calificaciones BD II:</strong><br><br>• Ejercicios semanales: 40%<br>• Proyectos por unidad: 30%<br>• Exámenes: 20%<br>• Participación: 10%`,r:['📚 Curso','💻 Proyectos','📧 Contacto']};
+
+            /* -- Saludos -- */
+            if(/^(hola|hey|hi|buenos|buenas|saludos|que tal|ola|holaa)/i.test(l)){
+                const s=['¡Hola! 👋 ¿En qué puedo ayudarte?','¡Hey! 😊 Soy el asistente de Jeick. Pregúntame lo que quieras.','¡Hola! 🌟 ¿Necesitas info sobre Jeick, el curso o algo más?'];
+                return{msg:s[Math.floor(Math.random()*s.length)],r:['👤 Sobre Jeick','💻 Proyectos','🛠️ Skills']};
+            }
+
+            if(/^(adios|chao|bye|hasta luego|nos vemos)/i.test(l))
+                return{msg:'¡Hasta luego! 👋 Fue un placer. ¡Vuelve cuando quieras!',r:['👤 Sobre Jeick','📧 Contacto']};
+
+            if(/^(gracias|thanks|te agradezco)/i.test(l))
+                return{msg:'¡De nada! 😊 ¿Algo más?',r:['👤 Sobre Jeick','💻 Proyectos']};
+
+            /* -- Ayuda -- */
+            if(/^(ayuda|help|que puedes|que sabes|menu|opciones)/i.test(l))
+                return{msg:`🆘 <strong>Puedo ayudarte con:</strong><br><br>👤 Info sobre <strong>Jeick</strong><br>💻 Sus <strong>proyectos</strong><br>🛠️ <strong>Tecnologías</strong> que usa<br>📧 <strong>Contacto</strong><br>📚 Info del <strong>curso BD II</strong><br>🔢 <strong>Cálculos</strong> matemáticos<br>🔄 <strong>Conversiones</strong> de unidades<br>⏰ <strong>Fecha y hora</strong><br>😂 <strong>Chistes</strong> y 💡 <strong>datos curiosos</strong><br><br>¡Escribe o usa los botones!`,r:['👤 Sobre Jeick','🔢 Calcular','😂 Chiste']};
+
+            /* -- Cálculos -- */
+            if(/calcul|cu[aá]nto|resultado|cu[aá]nto da|resuelve|porcentaje|ra[ií]z|[\d]+\s*[\+\-\*\/]/i.test(l)){
+                const r=_cbMath(m);
+                if(r)return{msg:r,r:['Otro cálculo','🔄 Convertir','😂 Chiste']};
+            }
+
+            /* -- Conversiones -- */
+            if(/convert|convierte|pasa.*a |equivale|cu[aá]ntos?.*(km|milla|metro|pie|pulgada|libra|kilo|galon|litro|fahrenheit|celsius)/i.test(l)){
+                const r=_cbConv(m);
+                if(r)return{msg:r,r:['Otra conversión','🔢 Calcular','💡 Dato']};
+            }
+
+            /* -- Fecha/Hora -- */
+            if(/hora|fecha|d[ií]a es|qu[eé] d[ií]a|qué hora/i.test(l)){
+                const n=new Date();
+                return{msg:`⏰ <strong>Ahora:</strong><br><br>📅 ${n.toLocaleDateString('es-PE',{weekday:'long',year:'numeric',month:'long',day:'numeric'})}<br>🕐 ${n.toLocaleTimeString('es-PE')}<br>🌍 ${Intl.DateTimeFormat().resolvedOptions().timeZone}`,r:['🔢 Calcular','😂 Chiste','💡 Dato']};
+            }
+
+            /* -- Chistes -- */
+            if(/chist|gracioso|broma|humor|re[ií]r|divertid|joke/i.test(l)){
+                const j=["¿Por qué los programadores confunden Halloween con Navidad? Porque Oct 31 = Dec 25 🎃🎄","¿Qué le dice un bit a otro? ¡Nos vemos en el bus! 🚌","¿Cuántos programadores para cambiar un foco? Ninguno, es problema de hardware 💡","Un SQL va a un bar y pregunta: ¿Puedo unirme? (JOIN) 🍺","¿Por qué Java usa gafas? Porque no ve C# 🤓","Error 404: Chiste no encontrado... ¡mentira! 😄"];
+                return{msg:j[Math.floor(Math.random()*j.length)],r:['Otro chiste','💡 Dato','👤 Sobre Jeick']};
+            }
+
+            /* -- Datos curiosos -- */
+            if(/dato curi|curios|sab[ií]as que|fun fact/i.test(l)){
+                const d=["🧠 El cerebro humano almacena ~2.5 petabytes. ¡Más que cualquier BD!","💻 El primer bug fue una polilla real en 1947 (Grace Hopper).","⚡ El 90% de los datos del mundo fueron creados en los últimos 2 años.","🗄️ PostgreSQL fue creado en 1986 en Berkeley.","🔒 La primera contraseña fue usada en el MIT en 1961.","🌍 Existen +700 lenguajes de programación."];
+                return{msg:d[Math.floor(Math.random()*d.length)],r:['Otro dato','😂 Chiste','👤 Sobre Jeick']};
+            }
+
+            /* -- Definiciones -- */
+            if(/^(qu[eé] es|qu[eé] son|define|explica|what is)/i.test(l)){
+                const t=l.replace(/^(qu[eé] es|qu[eé] son|define|explica|what is)\s*/i,'').trim();
+                const defs={
+                    'java':'☕ <strong>Java</strong> es un lenguaje de programación orientado a objetos, multiplataforma. Jeick lo usa a nivel avanzado con Maven, POO y patrones de diseño.',
+                    'javascript':'⚡ <strong>JavaScript</strong> agrega interactividad a la web. Manipula el DOM, hace peticiones a APIs y crea animaciones.',
+                    'html':'📄 <strong>HTML</strong> (HyperText Markup Language) estructura las páginas web con etiquetas como <code>&lt;div&gt;</code>, <code>&lt;p&gt;</code>, etc.',
+                    'css':'🎨 <strong>CSS</strong> controla la presentación visual: colores, fuentes, layouts, animaciones, responsive design.',
+                    'sql':'📝 <strong>SQL</strong> gestiona bases de datos relacionales: CREATE, SELECT, INSERT, UPDATE, DELETE, JOINs.',
+                    'mysql':'🐬 <strong>MySQL</strong> es un SGBD relacional open-source muy popular. Jeick lo usa con JDBC en sus proyectos Java.',
+                    'supabase':'🟢 <strong>Supabase</strong> es una alternativa open-source a Firebase con PostgreSQL, auth, storage y APIs automáticas.',
+                    'git':'📦 <strong>Git</strong> es un sistema de control de versiones distribuido. Permite colaboración y manejo de ramas.',
+                    'api':'🔌 <strong>API</strong> permite que diferentes sistemas se comuniquen mediante reglas y protocolos.',
+                    'python':'🐍 <strong>Python</strong> es un lenguaje versátil usado en web, ciencia de datos, IA y automatización.',
+                    'react':'⚛️ <strong>React</strong> es una biblioteca de JS para crear interfaces de usuario con componentes reutilizables.',
+                    'figma':'🎨 <strong>Figma</strong> es una herramienta de diseño colaborativo para crear interfaces, prototipos y sistemas de diseño.'
+                };
+                for(const[k,v]of Object.entries(defs))if(t.includes(k))return{msg:v,r:['Otra definición','👤 Sobre Jeick','💡 Dato']};
+                return{msg:`🤔 No tengo info específica sobre "${t}". Pregúntame sobre tecnología, Jeick o el curso.`,r:['👤 Sobre Jeick','🛠️ Skills','💡 Dato']};
+            }
+
+            /* -- Quién eres -- */
+            if(/quien eres|que eres|tu nombre|como te llamas|eres un bot/i.test(l))
+                return{msg:'🤖 Soy el <strong>asistente virtual</strong> del portafolio de <strong>Aranda Navarro Jeick</strong>. Respondo sobre él, el curso BD II, hago cálculos y más.',r:['👤 Sobre Jeick','💻 Proyectos','🆘 Ayuda']};
+
+            /* -- Motivación -- */
+            if(/motiv|animo|triste|cansad|no puedo|dif[ií]cil|estr[eé]s/i.test(l)){
+                const mot=['💪 "El éxito es trabajo duro, perseverancia y sacrificio." — Pelé','🌟 "No importa lo lento que vayas, mientras no te detengas." — Confucio','🔥 "Ama lo que haces y harás un gran trabajo." — Steve Jobs','⭐ "Cada experto fue primero un principiante."'];
+                return{msg:mot[Math.floor(Math.random()*mot.length)]+'<br><br>¡Tú puedes! 💪',r:['Gracias','👤 Sobre Jeick','😂 Chiste']};
+            }
+
+            /* -- Juegos -- */
+            if(/piedra.*papel|rock.*paper/i.test(l)){
+                const o=['🪨 Piedra','📄 Papel','✂️ Tijera'];
+                return{msg:`🎮 Yo elegí: <strong>${o[Math.floor(Math.random()*3)]}</strong>. ¿Ganaste? 😄`,r:['Otra vez','😂 Chiste','👤 Sobre Jeick']};
+            }
+            if(/dado|dice|lanza/i.test(l)){
+                const r=Math.floor(Math.random()*6)+1;
+                return{msg:`🎲 Resultado: <strong>${r}</strong> ${['⚀','⚁','⚂','⚃','⚄','⚅'][r-1]}`,r:['Otro dado','😂 Chiste','🔢 Calcular']};
+            }
+            if(/moneda|cara.*cruz|flip.*coin/i.test(l))
+                return{msg:`🪙 Resultado: <strong>${Math.random()>.5?'👑 CARA':'✖ CRUZ'}</strong>`,r:['Otra vez','🎲 Dado','😂 Chiste']};
+
+            /* -- Contraseña -- */
+            if(/genera.*contrase|password.*random|crear.*password/i.test(l)){
+                const c='abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%^&*';let p='';for(let i=0;i<16;i++)p+=c[Math.floor(Math.random()*c.length)];
+                return{msg:`🔐 Contraseña:<br><br><code>${p}</code>`,r:['Otra contraseña','👤 Sobre Jeick']};
+            }
+
+            /* -- Clima -- */
+            if(/clima|tiempo|weather|llueve|temperatura/i.test(l))
+                return{msg:'🌤️ Te recomiendo <a href="https://weather.com" target="_blank" style="color:var(--primary-light)">Weather.com</a> o <a href="https://wttr.in" target="_blank" style="color:var(--primary-light)">wttr.in</a> para el clima en tiempo real.',r:['😂 Chiste','💡 Dato','🔢 Calcular']};
+
+            /* -- Default -- */
+            return{msg:`🤔 No tengo info exacta sobre eso, pero puedo ayudarte con:<br><br>👤 Info de <strong>Jeick</strong><br>💻 <strong>Proyectos</strong> y <strong>skills</strong><br>📚 Info del <strong>curso</strong><br>🔢 <strong>Cálculos</strong> y 🔄 <strong>conversiones</strong><br>😂 <strong>Chistes</strong> y 💡 <strong>datos</strong>`,r:['👤 Sobre Jeick','🆘 Ayuda','😂 Chiste']};
+        }
+
+        /* ====== MATH ENGINE ====== */
+        function _cbMath(m){
+            const l=m.toLowerCase();
+            // X% de Y
+            const pm=l.match(/(\d+(?:\.\d+)?)\s*%\s*(?:de|del)\s*(\d+(?:\.\d+)?)/);
+            if(pm){const p=+pm[1],n=+pm[2],r=(p/100)*n;return`🔢 ${p}% de ${n} = <strong>${r}</strong>`}
+            // Raíz
+            const sm=l.match(/ra[ií]z.*?(\d+(?:\.\d+)?)/);
+            if(sm){const n=+sm[1],r=Math.sqrt(n);return`🔢 √${n} = <strong>${Number.isInteger(r)?r:r.toFixed(6)}</strong>`}
+            // Expresión
+            let e=l.replace(/calcula|cu[aá]nto.*?(es|da)|resuelve|resultado.*?(de|=)|equals/gi,'').replace(/x/gi,'*').replace(/entre|dividido/gi,'/').replace(/m[aá]s/g,'+').replace(/por\s*(?!ciento)/gi,'*').replace(/menos/g,'-').replace(/\s+/g,'').trim();
+            if(/^[\d\+\-\*\/\.\(\)\^%]+$/.test(e)&&e.length>1){
+                try{
+                    e=e.replace(/\^/g,'**');
+                    const r=Function('"use strict";return('+e+')')();
+                    if(typeof r==='number'&&isFinite(r))return`🔢 <code>${e}</code> = <strong>${Number.isInteger(r)?r:parseFloat(r.toFixed(6))}</strong>`;
+                }catch(ex){}
+            }
+            return null;
+        }
+
+        /* ====== CONVERSION ENGINE ====== */
+        function _cbConv(m){
+            const l=m.toLowerCase();
+            const match=l.match(/(\d+(?:\.\d+)?)\s*(km|m|cm|mm|lb|kg|g|gal|l|ml|millas?|metros?|pies?|pulgadas?|libras?|gramos?|litros?|fahrenheit|celsius|°f|°c|kb|mb|gb|tb)\s*(?:a|to|en|son|equivale)\s*(km|m|cm|mm|lb|kg|g|gal|l|ml|millas?|metros?|pies?|pulgadas?|libras?|gramos?|litros?|fahrenheit|celsius|°f|°c|kb|mb|gb|tb)?/i);
+            if(!match)return null;
+            const v=+match[1];
+            let f=match[2].toLowerCase(),t=match[3]?match[3].toLowerCase():null;
+            const N=u=>({km:'km',m:'m',cm:'cm',mm:'mm',lb:'lb',kg:'kg',g:'g',gal:'gal',l:'l',ml:'ml',milla:'mi',millas:'mi',metro:'m',metros:'m',pie:'ft',pies:'ft',pulgada:'in',pulgadas:'in',libra:'lb',libras:'lb',gramo:'g',gramos:'g',litro:'l',litros:'l',fahrenheit:'°f',celsius:'°c','°f':'°f','°c':'°c',kb:'KB',mb:'MB',gb:'GB',tb:'TB'})[u]||u;
+            f=N(f);if(!t){t={km:'mi',m:'ft',cm:'in',mm:'in',mi:'km',ft:'m',in:'cm',lb:'kg',kg:'lb',g:'oz',oz:'g',gal:'l',l:'gal',ml:'oz','°f':'°c','°c':'°f',B:'KB',KB:'MB',MB:'GB',GB:'TB',TB:'GB'}[f]}t=N(t);if(!t)return null;
+            const C={
+                'km-mi':n=>`${n} km = <strong>${(n*.621371).toFixed(4)}</strong> millas`,
+                'mi-km':n=>`${n} millas = <strong>${(n*1.60934).toFixed(4)}</strong> km`,
+                'm-ft':n=>`${n} m = <strong>${(n*3.28084).toFixed(4)}</strong> pies`,
+                'ft-m':n=>`${n} pies = <strong>${(n*.3048).toFixed(4)}</strong> m`,
+                'cm-in':n=>`${n} cm = <strong>${(n*.393701).toFixed(4)}</strong> pulgadas`,
+                'in-cm':n=>`${n} pulgadas = <strong>${(n*2.54).toFixed(4)}</strong> cm`,
+                'mm-in':n=>`${n} mm = <strong>${(n*.03937).toFixed(4)}</strong> pulgadas`,
+                'lb-kg':n=>`${n} lb = <strong>${(n*.453592).toFixed(4)}</strong> kg`,
+                'kg-lb':n=>`${n} kg = <strong>${(n*2.20462).toFixed(4)}</strong> lb`,
+                'g-oz':n=>`${n} g = <strong>${(n*.035274).toFixed(4)}</strong> oz`,
+                'oz-g':n=>`${n} oz = <strong>${(n*28.3495).toFixed(4)}</strong> g`,
+                'gal-l':n=>`${n} gal = <strong>${(n*3.78541).toFixed(4)}</strong> litros`,
+                'l-gal':n=>`${n} litros = <strong>${(n*.264172).toFixed(4)}</strong> gal`,
+                'ml-oz':n=>`${n} ml = <strong>${(n*.033814).toFixed(4)}</strong> oz`,
+                '°f-°c':n=>`${n}°F = <strong>${((n-32)*5/9).toFixed(2)}</strong>°C`,
+                '°c-°f':n=>`${n}°C = <strong>${(n*9/5+32).toFixed(2)}</strong>°F`,
+                'KB-MB':n=>`${n} KB = <strong>${(n/1024).toFixed(6)}</strong> MB`,
+                'MB-GB':n=>`${n} MB = <strong>${(n/1024).toFixed(6)}</strong> GB`,
+                'GB-TB':n=>`${n} GB = <strong>${(n/1024).toFixed(6)}</strong> TB`,
+                'TB-GB':n=>`${n} TB = <strong>${(n*1024).toFixed(2)}</strong> GB`,
+                'GB-MB':n=>`${n} GB = <strong>${(n*1024).toFixed(2)}</strong> MB`,
+                'MB-KB':n=>`${n} MB = <strong>${(n*1024).toFixed(2)}</strong> KB`
+            };
+            const k=f+'-'+t;
+            if(C[k])return`🔄 <strong>Conversión:</strong><br><br>${C[k](v)}`;
+            return null;
         }
 
         loadUploadedFiles();
