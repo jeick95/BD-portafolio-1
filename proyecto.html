@@ -1803,6 +1803,7 @@
 
         /* ====== CHATBOT ENGINE ====== */
         let _cbOpen = false;
+        const GEMINI_PROXY_URL = 'https://dcntccncakaaftphyrkh.supabase.co/functions/v1/gemini-proxy';
 
         function cbToggle(){
             const p=document.getElementById('cbPanel'),b=document.getElementById('cbBtn');
@@ -1814,13 +1815,31 @@
 
         function cbSend(msg){document.getElementById('cbInput').value=msg;cbSendMsg()}
 
-        function cbSendMsg(){
+        async function cbSendMsg(){
             const inp=document.getElementById('cbInput'),msg=inp.value.trim();
             if(!msg)return;
             _cbAdd(msg,'u');
             inp.value='';
             _cbTyping();
-            setTimeout(()=>{_cbRmTyping();const r=_cbAI(msg);_cbAdd(r.msg,'b',r.r)},500+Math.random()*600);
+            const r=_cbAI(msg);
+            if(!r.msg.includes('No tengo info exacta')){
+                setTimeout(()=>{_cbRmTyping();_cbAdd(r.msg,'b',r.r)},300+Math.random()*400);
+                return;
+            }
+            try{
+                const res=await fetch(GEMINI_PROXY_URL,{
+                    method:'POST',
+                    headers:{'Content-Type':'application/json'},
+                    body:JSON.stringify({message:msg,context:'Eres el asistente virtual del portafolio de Aranda Navarro Jeick del curso Base de Datos II en UPLA. Responde en español, sé conciso y útil.'})
+                });
+                const data=await res.json();
+                _cbRmTyping();
+                if(data.reply)_cbAdd(data.reply,'b',['Otro tema','Sobre Jeick','Skills']);
+                else _cbAdd(r.msg,'b',r.r);
+            }catch(e){
+                _cbRmTyping();
+                _cbAdd(r.msg,'b',r.r);
+            }
         }
 
         function _cbAdd(txt,type,qr){
