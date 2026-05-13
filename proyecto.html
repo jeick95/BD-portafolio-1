@@ -1830,7 +1830,7 @@
                 const res=await fetch(GEMINI_PROXY_URL,{
                     method:'POST',
                     headers:{'Content-Type':'application/json'},
-                    body:JSON.stringify({message:msg,context:'Eres el asistente virtual del portafolio de Aranda Navarro Jeick del curso Base de Datos II en UPLA. Responde en español, sé conciso y útil.'})
+                    body:JSON.stringify({message:msg})
                 });
                 const data=await res.json();
                 _cbRmTyping();
